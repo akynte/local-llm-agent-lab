@@ -1,0 +1,135 @@
+kind	log_line	engine_started_local	payload
+engine_start	12627	2026-11-02 18:42:06	strata --serve --pack packs/iq3_xxs --native models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf --ple-gguf models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf --expert-profile expert-profile.bin --expert-cache auto --spec 4 --max-context 262144 --kv q4_0 --kv-resident 20480 --vram-reserve-mib 768 --prefill auto
+event	12651	2026-11-02 18:42:06	expert cache 1107 slots, 1.82 GiB of VRAM; policy is
+event	12662	2026-11-02 18:42:06	prompt chunk auto: 2048 tokens, a 227-slot ring
+event	12677	2026-11-02 18:42:06	prompt 53 tokens = 0 reused + 53 read in 872 ms (60.8 tok/s), 1 generated in 42 ms (24.0 tok/s), drafts accepted 0 of 0, 1 checkpoints
+event	12678	2026-11-02 18:42:06	decode expert cache hit rate: 17.5% (48 hits / 275 lookups); 72 more read by the GPU over PCIe or from another GPU (20.7% of all 347 routed)
+event	12680	2026-11-02 18:42:06	KV streaming: 96.30% of 4536 block reads hit VRAM, 0.7 MiB read from RAM
+event	12681	2026-11-02 18:42:06	conversation cache: parked 53 tokens in 80.2 ms; parked=1 bytes=236603804 evictions=0 snapshot_bytes=236603804 reused_kv_bytes=0
+event	12686	2026-11-02 18:42:06	prompt 16992 tokens = 0 reused + 16992 read in 35811 ms (474.5 tok/s), 32 generated in 1330 ms (24.1 tok/s), drafts accepted 0 of 6, 2 checkpoints
+event	12687	2026-11-02 18:42:06	decode expert cache hit rate: 41.3% (5068 hits / 12259 lookups); 1908 more read by the GPU over PCIe or from another GPU (13.5% of all 14167 routed)
+event	12689	2026-11-02 18:42:06	KV streaming: 91.94% of 258804 block reads hit VRAM, 84.1 MiB read from RAM
+engine_start	12691	2026-11-02 18:44:27	strata --serve --pack packs/iq3_xxs --native models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf --ple-gguf models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf --expert-profile expert-profile.bin --expert-cache auto --spec 4 --max-context 262144 --kv q4_0 --kv-resident 20480 --vram-reserve-mib 512 --prefill auto
+event	12715	2026-11-02 18:44:27	expert cache 1257 slots, 2.07 GiB of VRAM; policy is
+event	12726	2026-11-02 18:44:27	prompt chunk auto: 2816 tokens, a 227-slot ring
+event	12742	2026-11-02 18:44:27	prompt 53 tokens = 0 reused + 53 read in 843 ms (62.8 tok/s), 1 generated in 41 ms (24.4 tok/s), drafts accepted 0 of 0, 1 checkpoints
+event	12743	2026-11-02 18:44:27	decode expert cache hit rate: 20.1% (56 hits / 279 lookups); 70 more read by the GPU over PCIe or from another GPU (20.1% of all 349 routed)
+event	12745	2026-11-02 18:44:27	KV streaming: 96.30% of 4536 block reads hit VRAM, 0.7 MiB read from RAM
+event	12746	2026-11-02 18:44:27	conversation cache: parked 53 tokens in 78.1 ms; parked=1 bytes=236603804 evictions=0 snapshot_bytes=236603804 reused_kv_bytes=0
+event	12751	2026-11-02 18:44:27	prompt 16994 tokens = 0 reused + 16994 read in 28041 ms (606.0 tok/s), 32 generated in 1230 ms (26.0 tok/s), drafts accepted 0 of 6, 2 checkpoints
+event	12752	2026-11-02 18:44:27	decode expert cache hit rate: 42.3% (5216 hits / 12329 lookups); 1908 more read by the GPU over PCIe or from another GPU (13.4% of all 14237 routed)
+event	12754	2026-11-02 18:44:27	KV streaming: 91.90% of 258816 block reads hit VRAM, 84.5 MiB read from RAM
+engine_start	12756	2026-11-02 18:49:35	strata --serve --pack packs/iq3_xxs --native models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf --ple-gguf models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf --expert-profile expert-profile.bin --expert-cache auto --spec 4 --max-context 262144 --kv q4_0 --kv-resident 20480 --vram-reserve-mib 512 --prefill auto --adapt-async 1
+event	12780	2026-11-02 18:49:35	expert cache 1257 slots, 2.07 GiB of VRAM; policy is
+event	12791	2026-11-02 18:49:35	prompt chunk auto: 2816 tokens, a 227-slot ring
+event	12807	2026-11-02 18:49:35	prompt 53 tokens = 0 reused + 53 read in 844 ms (62.8 tok/s), 1 generated in 42 ms (24.0 tok/s), drafts accepted 0 of 0, 1 checkpoints
+event	12808	2026-11-02 18:49:35	decode expert cache hit rate: 20.1% (56 hits / 279 lookups); 70 more read by the GPU over PCIe or from another GPU (20.1% of all 349 routed)
+event	12811	2026-11-02 18:49:35	KV streaming: 96.30% of 4536 block reads hit VRAM, 0.7 MiB read from RAM
+event	12812	2026-11-02 18:49:35	conversation cache: parked 53 tokens in 99.3 ms; parked=1 bytes=236603804 evictions=0 snapshot_bytes=236603804 reused_kv_bytes=0
+event	12817	2026-11-02 18:49:35	prompt 16993 tokens = 0 reused + 16993 read in 28047 ms (605.9 tok/s), 32 generated in 1171 ms (27.3 tok/s), drafts accepted 0 of 6, 2 checkpoints
+event	12818	2026-11-02 18:49:35	decode expert cache hit rate: 41.8% (5128 hits / 12282 lookups); 1946 more read by the GPU over PCIe or from another GPU (13.7% of all 14228 routed)
+event	12821	2026-11-02 18:49:35	KV streaming: 91.97% of 258816 block reads hit VRAM, 83.7 MiB read from RAM
+event	12823	2026-11-02 18:49:35	conversation cache: parked 17024 tokens in 169.9 ms; parked=2 bytes=734826060 evictions=0 snapshot_bytes=498222256 reused_kv_bytes=0
+event	12829	2026-11-02 18:49:35	prompt 12719 tokens = 0 reused + 12719 read in 23832 ms (533.7 tok/s), 5843 generated in 207858 ms (28.1 tok/s), drafts accepted 759 of 808, 2 checkpoints
+event	12830	2026-11-02 18:49:35	decode expert cache hit rate: 57.7% (1225477 hits / 2125557 lookups); 156228 more read by the GPU over PCIe or from another GPU (6.8% of all 2281785 routed)
+event	12833	2026-11-02 18:49:35	KV streaming: 99.86% of 36331176 block reads hit VRAM, 207.3 MiB read from RAM
+engine_start	12835	2026-11-02 18:57:26	strata --serve --pack packs/iq3_xxs --native models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf --ple-gguf models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf --expert-profile expert-profile.bin --expert-cache auto --spec 4 --max-context 262144 --kv q4_0 --kv-resident 20480 --vram-reserve-mib 512 --prefill auto --adapt-async 0
+event	12859	2026-11-02 18:57:26	expert cache 1257 slots, 2.07 GiB of VRAM; policy is
+event	12870	2026-11-02 18:57:26	prompt chunk auto: 2816 tokens, a 227-slot ring
+event	12885	2026-11-02 18:57:26	prompt 53 tokens = 0 reused + 53 read in 841 ms (63.0 tok/s), 1 generated in 41 ms (24.2 tok/s), drafts accepted 0 of 0, 1 checkpoints
+event	12886	2026-11-02 18:57:26	decode expert cache hit rate: 20.1% (56 hits / 279 lookups); 70 more read by the GPU over PCIe or from another GPU (20.1% of all 349 routed)
+event	12888	2026-11-02 18:57:26	KV streaming: 96.30% of 4536 block reads hit VRAM, 0.7 MiB read from RAM
+event	12889	2026-11-02 18:57:26	conversation cache: parked 53 tokens in 79.8 ms; parked=1 bytes=236603804 evictions=0 snapshot_bytes=236603804 reused_kv_bytes=0
+event	12898	2026-11-02 18:57:26	prompt 12719 tokens = 0 reused + 12719 read in 24001 ms (529.9 tok/s), 5773 generated in 217749 ms (26.5 tok/s), drafts accepted 864 of 1021, 2 checkpoints
+event	12899	2026-11-02 18:57:26	decode expert cache hit rate: 57.6% (1234542 hits / 2141826 lookups); 161741 more read by the GPU over PCIe or from another GPU (7.0% of all 2303567 routed)
+event	12901	2026-11-02 18:57:26	KV streaming: 99.86% of 36565344 block reads hit VRAM, 208.6 MiB read from RAM
+engine_start	12903	2026-11-02 19:04:16	strata --serve --pack packs/iq3_xxs --native models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf --ple-gguf models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf --expert-profile expert-profile.bin --expert-cache auto --spec 4 --max-context 262144 --kv q4_0 --kv-resident 20480 --vram-reserve-mib 512 --prefill auto --adapt-async 1 --pcie-frac 0.20
+event	12926	2026-11-02 19:04:16	expert cache 1257 slots, 2.07 GiB of VRAM; policy is
+event	12937	2026-11-02 19:04:16	prompt chunk auto: 2816 tokens, a 227-slot ring
+event	12953	2026-11-02 19:04:16	prompt 53 tokens = 0 reused + 53 read in 844 ms (62.8 tok/s), 1 generated in 39 ms (25.4 tok/s), drafts accepted 0 of 0, 1 checkpoints
+event	12954	2026-11-02 19:04:16	decode expert cache hit rate: 18.1% (56 hits / 310 lookups); 39 more read by the GPU over PCIe or from another GPU (11.2% of all 349 routed)
+event	12957	2026-11-02 19:04:16	KV streaming: 96.30% of 4536 block reads hit VRAM, 0.7 MiB read from RAM
+event	12958	2026-11-02 19:04:16	conversation cache: parked 53 tokens in 79.0 ms; parked=1 bytes=236603804 evictions=0 snapshot_bytes=236603804 reused_kv_bytes=0
+event	12965	2026-11-02 19:04:16	prompt 12719 tokens = 0 reused + 12719 read in 23914 ms (531.9 tok/s), 12250 generated in 435001 ms (28.2 tok/s), drafts accepted 2209 of 2581, 2 checkpoints
+event	12966	2026-11-02 19:04:16	decode expert cache hit rate: 55.7% (2619070 hits / 4703969 lookups); 198790 more read by the GPU over PCIe or from another GPU (4.1% of all 4902759 routed)
+event	12969	2026-11-02 19:04:16	KV streaming: 99.90% of 77801436 block reads hit VRAM, 316.8 MiB read from RAM
+engine_start	12971	2026-11-02 19:13:24	strata --serve --pack packs/iq3_xxs --native models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf --ple-gguf models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf --expert-profile expert-profile.bin --expert-cache auto --max-context 262144 --kv q4_0 --kv-resident 20480 --vram-reserve-mib 512 --prefill auto --adapt-async 1 --pcie-frac 0.20 --spec 6
+event	12994	2026-11-02 19:13:24	expert cache 1257 slots, 2.07 GiB of VRAM; policy is
+event	13005	2026-11-02 19:13:24	prompt chunk auto: 2816 tokens, a 227-slot ring
+event	13021	2026-11-02 19:13:24	prompt 53 tokens = 0 reused + 53 read in 835 ms (63.5 tok/s), 1 generated in 39 ms (25.6 tok/s), drafts accepted 0 of 0, 1 checkpoints
+event	13022	2026-11-02 19:13:24	decode expert cache hit rate: 17.8% (55 hits / 309 lookups); 39 more read by the GPU over PCIe or from another GPU (11.2% of all 348 routed)
+event	13025	2026-11-02 19:13:24	KV streaming: 96.30% of 4536 block reads hit VRAM, 0.7 MiB read from RAM
+event	13026	2026-11-02 19:13:24	conversation cache: parked 53 tokens in 77.7 ms; parked=1 bytes=236603804 evictions=0 snapshot_bytes=236603804 reused_kv_bytes=0
+event	13037	2026-11-02 19:13:24	prompt 12719 tokens = 0 reused + 12719 read in 23662 ms (537.5 tok/s), 8562 generated in 300562 ms (28.5 tok/s), drafts accepted 1657 of 2043, 2 checkpoints
+event	13038	2026-11-02 19:13:24	decode expert cache hit rate: 54.3% (1806561 hits / 3325413 lookups); 150643 more read by the GPU over PCIe or from another GPU (4.3% of all 3476056 routed)
+event	13041	2026-11-02 19:13:24	KV streaming: 99.89% of 55162224 block reads hit VRAM, 242.9 MiB read from RAM
+engine_start	13043	2026-11-02 19:20:29	strata --serve --pack packs/iq3_xxs --native models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf --ple-gguf models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf --expert-profile expert-profile.bin --expert-cache auto --max-context 262144 --kv q4_0 --kv-resident 20480 --vram-reserve-mib 512 --prefill auto --adapt-async 1 --pcie-frac 0.20 --spec 6
+event	13066	2026-11-02 19:20:29	expert cache 1257 slots, 2.07 GiB of VRAM; policy is
+event	13077	2026-11-02 19:20:29	prompt chunk auto: 2816 tokens, a 227-slot ring
+event	13093	2026-11-02 19:20:29	prompt 53 tokens = 0 reused + 53 read in 825 ms (64.3 tok/s), 1 generated in 39 ms (25.6 tok/s), drafts accepted 0 of 0, 1 checkpoints
+event	13094	2026-11-02 19:20:29	decode expert cache hit rate: 17.8% (55 hits / 309 lookups); 39 more read by the GPU over PCIe or from another GPU (11.2% of all 348 routed)
+event	13097	2026-11-02 19:20:29	KV streaming: 96.30% of 4536 block reads hit VRAM, 0.7 MiB read from RAM
+event	13098	2026-11-02 19:20:29	conversation cache: parked 53 tokens in 78.3 ms; parked=1 bytes=236603804 evictions=0 snapshot_bytes=236603804 reused_kv_bytes=0
+event	13109	2026-11-02 19:20:29	prompt 12719 tokens = 0 reused + 12719 read in 23667 ms (537.4 tok/s), 7631 generated in 261717 ms (29.2 tok/s), drafts accepted 1756 of 1972, 2 checkpoints
+event	13110	2026-11-02 19:20:29	decode expert cache hit rate: 54.1% (1580528 hits / 2923971 lookups); 137699 more read by the GPU over PCIe or from another GPU (4.5% of all 3061670 routed)
+event	13113	2026-11-02 19:20:29	KV streaming: 99.88% of 48377868 block reads hit VRAM, 230.4 MiB read from RAM
+engine_start	13115	2026-11-02 20:03:24	strata --serve --pack packs/iq3_xxs --native models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf --ple-gguf models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf --expert-profile expert-profile.bin --expert-cache auto --prefill auto --max-context 262144 --kv q4_0 --kv-resident 20480 --vram-reserve-mib 768 --adapt-async 1 --pcie-frac 0.20 --spec 6
+event	13138	2026-11-02 20:03:24	expert cache 1107 slots, 1.82 GiB of VRAM; policy is
+event	13149	2026-11-02 20:03:24	prompt chunk auto: 2048 tokens, a 227-slot ring
+event	13164	2026-11-02 20:03:24	prompt 53 tokens = 0 reused + 53 read in 839 ms (63.2 tok/s), 1 generated in 39 ms (25.4 tok/s), drafts accepted 0 of 0, 1 checkpoints
+event	13165	2026-11-02 20:03:24	decode expert cache hit rate: 15.8% (48 hits / 304 lookups); 43 more read by the GPU over PCIe or from another GPU (12.4% of all 347 routed)
+event	13168	2026-11-02 20:03:24	KV streaming: 96.30% of 4536 block reads hit VRAM, 0.7 MiB read from RAM
+engine_start	13169	2026-11-02 20:06:30	strata --serve --pack packs/iq3_xxs --native models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf --ple-gguf models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf --expert-profile expert-profile.bin --expert-cache auto --max-context 262144 --kv q4_0 --kv-resident 20480 --vram-reserve-mib 768 --prefill auto --adapt-async 1 --pcie-frac 0.20 --spec 6
+event	13192	2026-11-02 20:06:30	expert cache 1107 slots, 1.82 GiB of VRAM; policy is
+event	13203	2026-11-02 20:06:30	prompt chunk auto: 2048 tokens, a 227-slot ring
+event	13218	2026-11-02 20:06:30	prompt 53 tokens = 0 reused + 53 read in 827 ms (64.1 tok/s), 1 generated in 39 ms (25.5 tok/s), drafts accepted 0 of 0, 1 checkpoints
+event	13219	2026-11-02 20:06:30	decode expert cache hit rate: 15.8% (48 hits / 304 lookups); 43 more read by the GPU over PCIe or from another GPU (12.4% of all 347 routed)
+event	13222	2026-11-02 20:06:30	KV streaming: 96.30% of 4536 block reads hit VRAM, 0.7 MiB read from RAM
+engine_start	13223	2026-11-02 20:31:11	strata --serve --pack packs/iq3_xxs --native models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf --ple-gguf models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf --expert-profile expert-profile.bin --expert-cache auto --prefill auto --max-context 262144 --kv q4_0 --kv-resident 20480 --vram-reserve-mib 768 --adapt-async 1 --pcie-frac 0.20 --spec 6 --mtp mtp/rt
+event	13234	2026-11-02 20:31:11	strata mtp: draft layer loaded, 822 MiB of VRAM (experts 675, dense 111), files read in 0.36 s (2158 MiB/s)
+event	13247	2026-11-02 20:31:11	expert cache 504 slots, 0.83 GiB of VRAM; policy is
+event	13258	2026-11-02 20:31:11	prompt chunk auto: 512 tokens, a 8-slot ring
+event	13274	2026-11-02 20:31:11	prompt 53 tokens = 0 reused + 53 read in 863 ms (61.4 tok/s), 1 generated in 40 ms (25.2 tok/s), drafts accepted 0 of 0, 1 checkpoints
+event	13275	2026-11-02 20:31:11	decode expert cache hit rate: 9.7% (29 hits / 300 lookups); 43 more read by the GPU over PCIe or from another GPU (12.5% of all 343 routed)
+event	13278	2026-11-02 20:31:11	KV streaming: 96.30% of 4536 block reads hit VRAM, 0.7 MiB read from RAM
+event	13279	2026-11-02 20:31:11	conversation cache: parked 53 tokens in 95.5 ms; parked=1 bytes=236636348 evictions=0 snapshot_bytes=236636348 reused_kv_bytes=0
+event	13290	2026-11-02 20:31:11	prompt 12719 tokens = 0 reused + 12719 read in 51737 ms (245.8 tok/s), 10951 generated in 420661 ms (26.0 tok/s), drafts accepted 8137 of 14022, 2 checkpoints
+event	13291	2026-11-02 20:31:11	decode expert cache hit rate: 31.9% (1923239 hits / 6031942 lookups); 604146 more read by the GPU over PCIe or from another GPU (9.1% of all 6636088 routed)
+event	13294	2026-11-02 20:31:11	KV streaming: 99.93% of 103792500 block reads hit VRAM, 295.1 MiB read from RAM
+engine_start	13296	2026-11-02 20:54:54	strata --serve --pack packs/iq3_xxs --native models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf --ple-gguf models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf --expert-profile expert-profile.bin --expert-cache auto --max-context 262144 --kv q4_0 --kv-resident 20480 --vram-reserve-mib 512 --prefill auto --adapt-async 1 --pcie-frac 0.20 --spec 6
+event	13319	2026-11-02 20:54:54	expert cache 1257 slots, 2.07 GiB of VRAM; policy is
+event	13330	2026-11-02 20:54:54	prompt chunk auto: 2816 tokens, a 227-slot ring
+event	13346	2026-11-02 20:54:54	prompt 53 tokens = 0 reused + 53 read in 816 ms (65.0 tok/s), 1 generated in 39 ms (25.6 tok/s), drafts accepted 0 of 0, 1 checkpoints
+event	13347	2026-11-02 20:54:54	decode expert cache hit rate: 17.8% (55 hits / 309 lookups); 39 more read by the GPU over PCIe or from another GPU (11.2% of all 348 routed)
+event	13350	2026-11-02 20:54:54	KV streaming: 96.30% of 4536 block reads hit VRAM, 0.7 MiB read from RAM
+event	13351	2026-11-02 20:54:54	conversation cache: parked 53 tokens in 102.5 ms; parked=1 bytes=236603804 evictions=0 snapshot_bytes=236603804 reused_kv_bytes=0
+event	13360	2026-11-02 20:54:54	prompt 157835 tokens = 0 reused + 157835 read in 265625 ms (594.2 tok/s), 43 generated in 1515 ms (28.4 tok/s), drafts accepted 13 of 22, 6 checkpoints
+event	13361	2026-11-02 20:54:54	decode expert cache hit rate: 36.3% (6622 hits / 18253 lookups); 1452 more read by the GPU over PCIe or from another GPU (7.4% of all 19705 routed)
+event	13364	2026-11-02 20:54:54	KV streaming: 90.84% of 357408 block reads hit VRAM, 131.8 MiB read from RAM
+event	13367	2026-11-02 20:54:54	conversation cache: parked 157877 tokens in 690.1 ms; parked=2 bytes=2400180800 evictions=0 snapshot_bytes=2163576996 reused_kv_bytes=0
+event	13368	2026-11-02 20:54:54	prompt 12733 tokens = 0 reused + 12733 read in 24135 ms (527.6 tok/s), 329 generated in 12004 ms (27.4 tok/s), drafts accepted 35 of 52, 2 checkpoints
+event	13369	2026-11-02 20:54:54	decode expert cache hit rate: 51.0% (65713 hits / 128752 lookups); 5852 more read by the GPU over PCIe or from another GPU (4.3% of all 134604 routed)
+event	13372	2026-11-02 20:54:54	KV streaming: 98.58% of 2156700 block reads hit VRAM, 123.6 MiB read from RAM
+event	13374	2026-11-02 20:54:54	prompt 13686 tokens = 13061 reused + 625 read in 2444 ms (255.7 tok/s), 225 generated in 6729 ms (33.4 tok/s), drafts accepted 54 of 76, 3 checkpoints
+event	13375	2026-11-02 20:54:54	decode expert cache hit rate: 50.9% (46421 hits / 91243 lookups); 4654 more read by the GPU over PCIe or from another GPU (4.9% of all 95897 routed)
+event	13378	2026-11-02 20:54:54	KV streaming: 99.04% of 3703380 block reads hit VRAM, 143.0 MiB read from RAM
+event	13380	2026-11-02 20:54:54	prompt 16668 tokens = 13910 reused + 2758 read in 4963 ms (555.7 tok/s), 19034 generated in 725355 ms (26.2 tok/s), drafts accepted 581 of 960, 4 checkpoints
+event	13381	2026-11-02 20:54:54	decode expert cache hit rate: 54.7% (3976421 hits / 7263292 lookups); 269788 more read by the GPU over PCIe or from another GPU (3.6% of all 7533080 routed)
+event	13384	2026-11-02 20:54:54	KV streaming: 99.69% of 123350832 block reads hit VRAM, 1536.0 MiB read from RAM
+event	13388	2026-11-02 20:54:54	prompt 37732 tokens = 35701 reused + 2031 read in 4737 ms (428.7 tok/s), 771 generated in 25998 ms (29.7 tok/s), drafts accepted 299 of 467, 5 checkpoints
+event	13389	2026-11-02 20:54:54	decode expert cache hit rate: 45.8% (154850 hits / 338227 lookups); 22744 more read by the GPU over PCIe or from another GPU (6.3% of all 360971 routed)
+event	13392	2026-11-02 20:54:54	KV streaming: 99.65% of 129161568 block reads hit VRAM, 1804.1 MiB read from RAM
+event	13394	2026-11-02 20:54:54	prompt 38668 tokens = 38502 reused + 166 read in 1431 ms (116.0 tok/s), 67 generated in 2710 ms (24.7 tok/s), drafts accepted 17 of 34, 6 checkpoints
+event	13395	2026-11-02 20:54:54	decode expert cache hit rate: 40.1% (11864 hits / 29590 lookups); 2191 more read by the GPU over PCIe or from another GPU (6.9% of all 31781 routed)
+event	13398	2026-11-02 20:54:54	KV streaming: 99.65% of 129703800 block reads hit VRAM, 1844.6 MiB read from RAM
+event	13400	2026-11-02 20:54:54	prompt 38789 tokens = 38734 reused + 55 read in 801 ms (68.7 tok/s), 1084 generated in 39474 ms (27.5 tok/s), drafts accepted 209 of 392, 6 checkpoints
+event	13401	2026-11-02 20:54:54	decode expert cache hit rate: 47.6% (219849 hits / 462109 lookups); 25877 more read by the GPU over PCIe or from another GPU (5.3% of all 487986 routed)
+event	13404	2026-11-02 20:54:54	KV streaming: 99.60% of 137862180 block reads hit VRAM, 2211.5 MiB read from RAM
+event	13406	2026-11-02 20:54:54	prompt 39902 tokens = 39875 reused + 27 read in 657 ms (41.1 tok/s), 86 generated in 3532 ms (24.4 tok/s), drafts accepted 26 of 46, 6 checkpoints
+event	13407	2026-11-02 20:54:54	decode expert cache hit rate: 37.5% (14199 hits / 37913 lookups); 2994 more read by the GPU over PCIe or from another GPU (7.3% of all 40907 routed)
+event	13410	2026-11-02 20:54:54	KV streaming: 99.59% of 138687924 block reads hit VRAM, 2273.9 MiB read from RAM
+event	13412	2026-11-02 20:54:54	prompt 40021 tokens = 39989 reused + 32 read in 711 ms (45.0 tok/s), 3012 generated in 112067 ms (26.9 tok/s), drafts accepted 322 of 538, 6 checkpoints
+event	13413	2026-11-02 20:54:54	decode expert cache hit rate: 53.7% (644275 hits / 1200532 lookups); 49900 more read by the GPU over PCIe or from another GPU (4.0% of all 1250432 routed)
+event	13416	2026-11-02 20:54:54	KV streaming: 99.50% of 158782212 block reads hit VRAM, 3168.7 MiB read from RAM
+event	13418	2026-11-02 20:54:54	prompt 43063 tokens = 43034 reused + 29 read in 732 ms (39.6 tok/s), 1730 generated in 62962 ms (27.5 tok/s), drafts accepted 540 of 807, 6 checkpoints
+event	13419	2026-11-02 20:54:54	decode expert cache hit rate: 45.4% (327894 hits / 721454 lookups); 45902 more read by the GPU over PCIe or from another GPU (6.0% of all 767356 routed)

@@ -1,0 +1,44 @@
+# Model weights and engine binaries are never committed
+*.gguf
+*.safetensors
+*.exl3
+*.ggml
+*.pack
+
+# Raw engine and agent logs: they interleave metrics with private conversation content.
+# Only sanitized extracts (TSV/JSON) are committed, under results/.
+*.log
+*.jsonl
+results/**/raw/
+
+# Local agent working state (session summaries, ledgers, checkpoints)
+.pi/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Go build/test scratch
+*.test
+*.out
+coverage.out
+
+# Scratch and caches
+.tmp/
+.cache/
+dist/
+site/_build/
+
+# Editor and tooling state
+.serena/
+.vscode/
+.idea/
+
+# OS noise
+.DS_Store
+Thumbs.db

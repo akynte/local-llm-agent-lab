@@ -1,0 +1,57 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 akynte
+
+Applies to: the research record of this repository — the documentation in
+`docs/`, `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, the case-study and
+engine write-ups in `engines/` and `agents/`, and the published measurement
+datasets in `results/` (`.tsv` record extracts, `manifest.json` metadata, and
+any derived table, figure or analysis published alongside them).
+
+The full legal text of the license is incorporated by reference and is the
+authoritative version:
+
+  https://creativecommons.org/licenses/by/4.0/legalcode
+
+Deed (plain-language summary of the terms):
+
+  https://creativecommons.org/licenses/by/4.0/
+
+You are free to:
+
+- **Share** — copy and redistribute the material in any medium or format for
+  any purpose, including commercially.
+- **Adapt** — remix, transform, build on, and re-run analysis over the data and
+  write-ups for any purpose, including commercially.
+
+Under these conditions:
+
+- **Attribution.** You must give the credit stated below, link to the license,
+  and indicate if you changed anything. You may do so in any reasonable manner,
+  but not in a way that suggests the licensor endorses you or your use.
+- **No additional restrictions.** You may not apply legal terms or technological
+  measures that legally restrict what the license permits.
+
+Required attribution form (the "preferred credit" under Section 3):
+
+> `<what you used>` from *local-llm-agent-lab* by akynte,
+> https://github.com/akynte/local-llm-agent-lab, licensed under CC BY 4.0 —
+> https://creativecommons.org/licenses/by/4.0/. Changes: `<what you changed>`.
+
+When you cite a specific number, cite the dataset directory it came from (for
+example `results/strata/2026-11-02-config-sweep/`) and the evidence class label
+attached to it. `docs/methodology.md` §1 defines those labels, and reusing a
+number without its label strips the uncertainty the record was written to carry.
+
+Two limits that are not license terms but are part of honest reuse, and are
+restated here because they are the most common misuse of this data:
+
+1. The published extracts are sanitized metric records. They are not raw logs,
+   and the raw logs are not available because they interleave private prompt and
+   completion content. A claim that requires raw-log access cannot be settled
+   from this data.
+2. Several numbers here are single-run observations. The license permits reuse;
+   it does not upgrade an **X**-class observation into a verified result.
+
+The software in this repository is licensed under the MIT license instead; see
+`LICENSE`.

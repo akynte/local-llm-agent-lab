@@ -1,0 +1,153 @@
+{
+  "dataset_id": "strata-20261102-mtp-attempts",
+  "kind": "engine-log-derived-metrics",
+  "license": "CC BY 4.0 for this dataset and manifest (research record; see LICENSE.docs, legal text at https://creativecommons.org/licenses/by/4.0/legalcode); extract.awk in this directory is MIT (see LICENSE)",
+  "schema_status": "provisional (a formal result schema is a Phase 2 deliverable; see docs/architecture.md)",
+  "captured_at_utc": "2026-11-03T10:23:00Z",
+  "timezone": "UTC+04:00; local timestamps in the TSV are engine-written",
+  "note_on_what_this_dataset_is": "the earlier part of the same 2026-11-02 day as the strata-20261102-config-sweep dataset: 24 engine sessions between 09:33 and 15:17 local, 16 of which carried --mtp and for which ten MTP outcomes were logged, and in which the KV quantization, vision state and pool settings differ from the evening sweep. It is published because it contradicts an oversimplified reading of the MTP result.",
+  "hardware": {
+    "cpu": "Intel Core i7-13620H (10 physical cores, 16 logical, no AVX-512)",
+    "ram_total_bytes": 65788956672,
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "vram_mib": 8188,
+    "vram_bytes": 8585740032,
+    "pci_link": "PCIe Gen4 16.0 GT/s x8 (currently active)",
+    "storage": "NVMe Samsung SSD 990 PRO 2 TB (model weights on this device)"
+  },
+  "host": {
+    "os": "Ubuntu 26.04.1 LTS (Resolute Raccoon)",
+    "kernel": "Linux 7.0.0-38-generic",
+    "gpu_driver": "595.99.02 (NVIDIA open kernel module)",
+    "cuda_variant": "cuda13"
+  },
+  "power_state": {
+    "profile": "not captured",
+    "load_avg_at_capture": [5.57, 6.47, 6.53],
+    "note": "load average at the moment this dataset was extracted; the machine was running a desktop session and an agent session served by the same engine"
+  },
+  "model": {
+    "name": "Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS",
+    "quantization": "IQ3_XXS (GSQ-RCO)",
+    "source": "https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF",
+    "files": [
+      { "name": "IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf", "bytes": 47039860096, "sha256": "219ea929900dfa9ef091f3aa473fdba6874b65fcb36526d7d851ac9e95856d15" },
+      { "name": "IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf", "bytes": 28800138432, "sha256": "316b46f3a2dbd68c900f43136ab9449f9dcc3725dfd8c794847c204bc161e113" }
+    ],
+    "mtp_draft_layer": { "name": "mtp-q2_0.gguf", "bytes": 889017216, "unpacks_to": "mtp/rt (823 MiB)" }
+  },
+  "engine": {
+    "name": "strata",
+    "version": "0.1.55",
+    "build_id": "99866a47a2b8+cuda13.0",
+    "backend": "CUDA",
+    "all_sessions_in_this_dataset_are_engine_0.1.55": true
+  },
+  "configuration": {
+    "shared": { "max_context": 262144, "expert_cache": "auto", "prefill": "auto", "spec": 4, "mode": "--serve" },
+    "family_a_vision_on": {
+      "sessions": "09:33:06 through 14:49:02 local",
+      "vision": true,
+      "kv_alternatives_used": ["int8", "k8v4"],
+      "extra_args_in_some_sessions": { "--prompt-cache-every 16384": "12 of 20", "--prompt-cache-tail": "12 of 20", "--spec-min-p 0.5": "18 of 20" },
+      "kv_resident_values": { "not set": 8, "20480": 4, "24576": 8 },
+      "vram_reserve_mib_values": { "not set": 14, "512": 1, "600": 3, "768": 1, "1024": 1 },
+      "pcie_frac_values": { "not set": 12, "0.15": 8 },
+      "pool_args_in_some_sessions": { "--pool-affinity p-cores": "4 of 20", "--pool-workers 6": "8 of 20" },
+      "conversation_cache_mib_values": { "not set": 12, "1024": 4, "2048": 4 }
+    },
+    "family_b_vision_off": {
+      "sessions": "15:01:18, 15:06:31, 15:12:20, 15:17:33 local",
+      "vision": false,
+      "kv": "int8 (all four)",
+      "kv_resident_values": { "not set": 1, "32768": 2, "8192": 1 },
+      "vram_reserve_mib_values": { "not set": 1, "768": 2, "1024": 1 },
+      "note": "the 15:01:18 launch set neither --kv-resident nor --vram-reserve-mib; an earlier version of this manifest listed only the set values and made it look as if every family-B launch carried both"
+    },
+    "difference_from_the_evening_sweep_dataset": "the evening dataset used --kv q4_0 with --vision absent, and six of its eleven launches used --spec 6 while five used --spec 4; this dataset used int8 or k8v4 KV, vision enabled in 20 of 24 sessions, and --spec 4 in all 24. Cross-dataset comparisons are therefore confounded on at least three variables."
+  },
+  "records": {
+    "tsv_lines_including_header": 234,
+    "records": 233,
+    "engine_sessions": 24,
+    "event_records": 209,
+    "prompt_metric_records": 183,
+    "prompt_records_that_generated_nothing": 5,
+    "prompt_records_completed": 178,
+    "short_warm_up_records_under_1000_prompt_tokens": 20,
+    "of_which_literal_53_token_warm_ups": 8,
+    "cold_completed_reused_0_prompt_at_least_1000_tokens": 22,
+    "cold_completed_reused_0_any_length": 42,
+    "warm_completed_reused_gt_0": 136,
+    "prompt_records_completed_excluding_short_warm_ups": 158,
+    "note_on_counting": "a prompt record is a line of the form 'prompt N tokens = R reused + F read …'; 8 further event lines begin with 'prompt chunk auto:' and are NOT prompt records. The 183 prompt records split as: 42 cold (reused = 0), of which 20 have prompts under 1 000 tokens and 8 of those are literally 'prompt 53 tokens'; 136 warm (reused > 0); and 5 cut-off prefills of the form '0 reused + 46914 of 190804 read … 0 generated in 0 ms'. Completed = 42 + 136 = 178. 'Excluding short warm-ups' means prompt length under 1 000 tokens, i.e. 22 + 136 = 158",
+    "launches_carrying_mtp": 16,
+    "mtp_outcomes_logged": 10,
+    "mtp_refusals": 6,
+    "mtp_dense_weights_allocation_failures": 1,
+    "mtp_successful_loads": 3,
+    "launches_with_mtp_and_no_logged_mtp_outcome": 6,
+    "launches_failed_on_unknown_argument": 5,
+    "cross_reference": "the five unknown-argument rejections are NOT in this TSV (the whitelist did not select 'unknown argument:' lines); they are published in results/strata/2026-10-30-11-02-engine-diagnostics/. The dense-weights allocation failure IS in this TSV, at log line 10761, and is also published there"
+  },
+  "key_records": {
+    "mtp_refusals_local_times": ["09:33:06", "09:38:56", "09:40:34", "09:48:48", "14:41:33", "14:42:38"],
+    "mtp_refusal_message_variants_in_this_window": ["mtp: the 512 experts do not fit in VRAM (246 MiB of 7807 MiB VRAM free on this GPU)", "mtp: the 512 experts do not fit in VRAM (247 MiB of 7807 MiB VRAM free on this GPU)"],
+    "mtp_refusal_message_note": "four of the six refusals in this window report 246 MiB free and two report 247 MiB; both variants are in the published TSV",
+    "mtp_other_failure": { "local": "11:29:40", "log_line": 10761, "message": "mtp: dense weights allocation failed (out of memory), requested 110 MiB, CUDA0 free 57 MiB (57 MiB of 7807 MiB VRAM free on this GPU)", "published_in": "this dataset at log line 10761, and also in results/strata/2026-10-30-11-02-engine-diagnostics/" },
+    "mtp_successful_loads": [
+      { "local": "10:00:17", "draft_vram_mib": 835, "expert_cache_slots": 616, "prompt_chunk_tokens": 768, "prompt_records": 24, "completed_requests": 23, "short_warm_ups_under_1000_tokens": 13, "of_which_literal_53_token": 1, "cut_off_prefills": 1, "drafts_accepted_of_proposed": "2948/4448 (66.3%)" },
+      { "local": "11:31:51", "draft_vram_mib": 835, "expert_cache_slots": 588, "prompt_chunk_tokens": 768, "prompt_records": 1, "completed_requests": 1, "short_warm_ups_under_1000_tokens": 1, "of_which_literal_53_token": 1, "cut_off_prefills": 0, "drafts_accepted_of_proposed": "0 of 0 (the single 53-token warm-up proposed nothing)" },
+      { "local": "11:34:58", "draft_vram_mib": 835, "expert_cache_slots": 536, "prompt_chunk_tokens": 512, "prompt_records": 141, "completed_requests": 140, "short_warm_ups_under_1000_tokens": 1, "of_which_literal_53_token": 1, "cut_off_prefills": 1, "drafts_accepted_of_proposed": "124947/164954 (75.7%)" }
+    ],
+    "failed_launches": [
+      { "local": "11:13:40", "reason": "unknown argument: --kv-streaming" },
+      { "local": "11:18:22", "reason": "unknown argument: --kv-streaming" },
+      { "local": "11:21:07", "reason": "unknown argument: --kv-streaming" },
+      { "local": "11:33:48", "reason": "unknown argument: --draft-vocab" },
+      { "local": "11:34:19", "reason": "unknown argument: --draft-vocab" }
+    ],
+    "cold_prefill_records_tokens_to_tok_per_s": {
+      "10:00:17 (MTP, 616 slots, chunk 768)": { "4089": [362.4, 382.5], "4093": [360.2, 375.1, 377.3], "16382": [389.0], "16387": [388.7, 390.4, 390.7], "16390": [388.5] },
+      "11:34:58 (MTP, 536 slots, chunk 512)": { "1222": 231.9, "14237": 252.2, "41814": 273.2, "48333": 279.6, "52297": 267.6, "89744": 260.2, "99021": 267.6, "189737": 254.3 },
+      "15:12:20 (no MTP, 952 slots, chunk 1024)": { "12716": 250.8 },
+      "15:17:33 (no MTP, 1039 slots, chunk 1536)": { "12606": 356.8, "16991": 376.9, "16993": 378.8 },
+      "decode_records": "51 decode records of >=1000 generated tokens in the 11:34:58 MTP session, range 22.6-28.6 tok/s"
+    },
+    "partial_prefill_records_excluded_from_cold_prefill_reading": [
+      "prompt 111085 tokens = 0 reused + 8192 of 111085 read in 33120 ms (247.3 tok/s), 0 generated",
+      "prompt 16992 tokens = 0 reused + 9216 of 16992 read in 24184 ms (381.1 tok/s), 0 generated",
+      "prompt 16093 tokens = 14808 reused + 1280 of 1285 read in 4266 ms (300.0 tok/s), 0 generated",
+      "prompt 190804 tokens = 0 reused + 46914 of 190804 read in 149061 ms (314.7 tok/s), 0 generated",
+      "prompt 208846 tokens = 0 reused + 68605 of 208846 read in 257673 ms (266.2 tok/s), 0 generated"
+    ],
+    "longest_prompt_statement_discipline": "189737 is the longest COMPLETED COLD prefill in this dataset. This dataset also contains prompt records of 190804 and 208846 tokens that never completed, and warm requests up to 197272 tokens. 'Longest prompt in the log' is false without those qualifiers."
+  },
+  "source_excerpt": {
+    "file_type": "sanitized metric excerpt of the Strata engine log",
+    "line_window": [9470, 12626],
+    "line_anchors_reverified": "lines 9470, 12626, 12627 and 13420 were re-checked against the log (the log had grown to 17 233, then 18 689, then 19 664 and then 20 648 lines; see conflict C11 in docs/evidence-inventory.md for the seven size observations) and still hold the records published here and in the evening sweep dataset; re-running the committed extract.awk reproduced this TSV byte for byte at all four of those later sizes. The highest log_line published in this file is 12 623; 12 626 is the end of the extracted window, not a published record",
+    "selection_rule": "narrower than the evening sweep's whitelist: engine_start, 'strata generate: expert cache N slots', 'strata serve: prompt chunk auto', 'strata mtp: draft layer loaded', 'strata serve: prompt N tokens = …' and 'strata generate: mtp:'. It deliberately does NOT include the 'KV streaming:', 'decode expert cache hit rate:' or 'conversation cache:' request counters that the evening dataset publishes, so hit-rate and KV-spill figures cannot be derived from this file",
+    "program_file": "extract.awk",
+    "program": "see extract.awk in this directory. Its whitelist is narrower than the evening dataset's: engine_start lines; 'strata generate: expert cache N slots'; 'strata serve: prompt chunk auto'; 'strata mtp: draft layer loaded'; 'strata generate: mtp:' (MTP refusal and dense-weights allocation failure); 'strata serve: prompt N tokens = …'. It deliberately omits the 'KV streaming', 'decode expert cache hit rate' and 'conversation cache' counters",
+    "program_note": "run it as: printf 'kind\\tlog_line\\tengine_started_local\\tpayload\\n' > engine-metrics.tsv, then awk -v lo=9470 -v hi=12626 -v R=\"$INSTALL_ROOT\" -f extract.awk \"$ENGINE_LOG\" >> engine-metrics.tsv. The install root is passed in at run time, so neither this manifest nor the program contains an absolute personal path. Syntax note: conditions are kept on one line because the default awk on this host is mawk, which rejects a condition continued across lines. Re-running the committed program reproduced this TSV byte for byte at 15 693, at 17 233, at 18 689, at 19 664 and at 20 648 log lines (see line_anchors_reverified)",
+    "sanitization_applied": [
+      "engine binary absolute path replaced with 'strata'",
+      "model, pack and draft-layer paths reduced to install-relative paths",
+      "no prompt text, completion text, tool output or conversation content published"
+    ]
+  },
+  "repetitions": { "identical_prompt_repetitions_present": true, "detail": "four repetition groups live in the 10:00:17 session, which ran the 16387-token prompt three times (388.7 / 390.4 / 390.7, 0.51% spread), the 4093-token prompt three times (360.2 / 375.1 / 377.3, 4.75%), the 4089-token prompt twice (362.4 / 382.5, 5.55%) and a 77-token prompt three times (52.2 / 54.0 / 87.2, 67.05%); 4089 and 4093 are two distinct prompts, not one prompt run five times. The 15:17:33 session ran 16991 and 16993 tokens, which are also two distinct prompts and not a repetition" },
+  "peak": { "ram_bytes": null, "vram_bytes": null, "sampled_every_s": null, "note": "not captured; only engine self-reported allocations exist" },
+  "limitations": [
+    "this is not a controlled experiment; it is the recorded history of interactive configuration attempts made during a working day",
+    "the KV quantization (int8 / k8v4 / q4_0), the vision state and --spec differ between sessions in this window and between this window and the evening sweep, so cross-session comparisons are confounded on several variables at once",
+    "five launches failed on unknown arguments (--kv-streaming, --draft-vocab), which shows the configuration was being edited by hand against a moving engine interface",
+    "no peak RAM or VRAM was sampled",
+    "prompt identity across sessions is inferred from exact token-count matches, not from published fixture hashes",
+    "the draft-acceptance totals for the 10:00:17 and 11:34:58 sessions are sums of the engine's own per-request counters, not an independent measurement",
+    "draft-acceptance counters also appear in the no-MTP sessions of this window, so 'no MTP' is not 'no drafting'; **what the drafts are drawn from is not established by published data** — prompt-suffix lookup is the engine's own description in a private help dump (gap G12) and is recorded as a hypothesis (X), not as a fact",
+    "the 189737-token cold prefill record is a single run at 254.3 tok/s in an MTP session; it is the longest completed cold prefill in this dataset and it is unreplicated",
+    "five prompt records in this dataset are cut-off prefills that generated nothing; they are published for completeness and are excluded from every throughput statement in this repository"
+  ]
+}

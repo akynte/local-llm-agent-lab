@@ -1,0 +1,109 @@
+{
+  "dataset_id": "strata-20261102-config-sweep",
+  "kind": "engine-log-derived-metrics",
+  "license": "CC BY 4.0 for this dataset and manifest (research record; see LICENSE.docs, legal text at https://creativecommons.org/licenses/by/4.0/legalcode); extract.awk in this directory is MIT (see LICENSE)",
+  "schema_status": "provisional (a formal result schema is a Phase 2 deliverable; see docs/architecture.md)",
+  "captured_at_utc": "2026-11-03T09:25:53Z",
+  "measurement_window_local": "2026-11-02 18:42 to 2026-11-02 20:54 (UTC+04:00)",
+  "measurement_window_utc_approx": "2026-11-02 14:42 to 2026-11-02 16:54",
+  "engine": {
+    "name": "Strata engine (strata --serve)",
+    "version": "0.1.55",
+    "build_id": "99866a47a2b8+cuda13.0",
+    "platform": "linux-x86_64",
+    "variant": "cuda13",
+    "component_manifest_sha256": "d08d9194502da8db1c12eb02f88bd37196c59e6f579fa8bb7423adb510d3624f",
+    "previous_version_in_same_log": {
+      "version": "0.1.54",
+      "build_id": "8c1aea4bca1b+cuda13.0",
+      "component_manifest_sha256": "5c2504c1440c219c6cba0714913101ea0b079deb91d9bb02629354a67754ca5a"
+    }
+  },
+  "model": {
+    "name": "Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS",
+    "quantization": "IQ3_XXS (GSQ-RCO)",
+    "source": "https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF",
+    "upstream_base_model": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+    "files": [
+      {
+        "name": "Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+        "bytes": 47039860096,
+        "sha256_local_marker": "219ea929900dfa9ef091f3aa473fdba6874b65fcb36526d7d851ac9e95856d15",
+        "sha256_upstream_lfs_oid": "219ea929900dfa9ef091f3aa473fdba6874b65fcb36526d7d851ac9e95856d15",
+        "match": true
+      },
+      {
+        "name": "Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf",
+        "bytes": 28800138432,
+        "sha256_local_marker": "316b46f3a2dbd68c900f43136ab9449f9dcc3725dfd8c794847c204bc161e113",
+        "sha256_upstream_lfs_oid": "316b46f3a2dbd68c900f43136ab9449f9dcc3725dfd8c794847c204bc161e113",
+        "match": true
+      }
+    ],
+    "derived_pack": "tools/iq_pack.py pack (schema 1), dense.bin 1538035200 bytes",
+    "mtp_draft_layer": {
+      "file": "mtp-q2_0.gguf",
+      "bytes": 889017216,
+      "loaded_vram_mib_observed": [822, 834, 835],
+      "note": "822 MiB in the 20:31 session analysed here; 834-835 MiB in seven earlier sessions across both engine generations - the three 835 MiB loads of the 2026-11-02 morning are published in results/strata/2026-11-02-mtp-attempts/, the three 834 MiB loads and the fourth 835 MiB load on 0.1.54-era launches are published only in results/strata/2026-10-30-11-02-engine-diagnostics/"
+    },
+    "provenance_note": "Integrity verified locally: the sha256 recorded by the local download marker equals the upstream Hugging Face LFS oid for both shards. The local marker is written by the engine's downloader, not by this project."
+  },
+  "hardware_reference": "docs/hardware.md",
+  "source_log": {
+    "role": "Strata engine log for the iq3_xxs-256k launch profile",
+    "published": false,
+    "reason_not_published": "the raw log interleaves request metrics with prompt and completion content from private agent sessions",
+    "lines_at_extraction": 15426,
+    "bytes_at_extraction": 1948084,
+    "sha256_at_extraction": "98ce435b914e2ddb118b17eb883147e89a21e26de9b60b91d700bb88f8c765ae",
+    "note": "the log was still being written while the engine served, so this hash identifies the snapshot the excerpt was taken from",
+    "size_was_not_monotonic": {
+      "observations": [
+        { "at_utc": "2026-11-03T07:11", "lines": 15426, "bytes": 1948084 },
+        { "at_utc": "2026-11-03T07:25", "lines": 16105, "bytes": 2042926 },
+        { "at_utc": "2026-11-03T10:22", "lines": 15693, "bytes": 1983754 },
+        { "at_utc": "2026-11-03T13:27", "lines": 17233, "bytes": 2188804, "note": "the log is still being written, because the engine that serves this audit session is the same engine whose log this is" },
+        { "at_utc": "2026-11-03T17:20", "lines": 18689, "bytes": 2383202, "note": "still growing during the audit; all three published datasets re-extracted byte for byte at this size" },
+        { "at_utc": "2026-11-03T20:29:42Z", "lines": 19664, "bytes": 2513242, "sha256_prefix": "034545f8aa98b73d0fccb08b", "note": "the engine serving this audit was still writing to this log; all three published datasets re-extracted byte for byte at this size too" },
+        { "at_utc": "2026-11-04T00:48:21Z", "lines": 20648, "bytes": 2644061, "sha256_prefix": "147bb441dd6f", "note": "still growing between review rounds; all three published datasets re-extracted byte for byte at this size as well" }
+      ],
+      "consequence": "the log cannot be assumed append-only. Line numbers are anchors that must be re-verified, not stable identifiers.",
+      "reverification": "the extraction was re-run against the current log with the committed extract.awk and diffed against this published TSV: byte for byte identical at 15 693, at 17 233, at 18 689, at 19 664 and again at 20 648 lines. Line 12627 is still the 18:42:06 engine start and line 13420 still holds the same record. Both anchors are mid-file; no head line was re-verified, and conflict C11 records that the file's head belongs to a launch whose engine-started record is no longer in it, so no claim of head stability is made here.",
+      "open_question": "why the file shrank between the second and third observations is not understood (conflict C11 in docs/evidence-inventory.md)"
+    }
+  },
+  "extraction": {
+    "line_range_inclusive": [12627, 13420],
+    "records_selected": {
+      "engine_start": 11,
+      "event": 123,
+      "prompt_metric_lines": 30,
+      "prompt_metric_lines_that_are_53_token_warm_ups": 11,
+      "prompt_metric_lines_cold_reused_0": 11,
+      "prompt_metric_lines_warm_reused_gt_0": 8,
+      "note_on_reused_zero_counting": "22 of the 30 prompt records have '0 reused': 11 of them are the 53-token warm-up probes and 11 are substantive cold requests. The field above counts the substantive cold ones only",
+      "note_on_counting": "a prompt record is a line of the form 'prompt N tokens = R reused + F read …'. 11 further event lines begin with 'prompt chunk auto:' and are NOT prompt records. None of the 30 prompt records is a cut-off prefill; 8 have non-zero reused prompt tokens, all in the 20:54:54 session, and their reported 'prefill' rates span 39.6-555.7 tok/s"
+    },
+    "tool": "mawk 1.3.4 (this host's default awk)",
+    "program_note": "the program is committed in this directory as extract.awk and is the program that was actually run; run it as: printf 'kind\\tlog_line\\tengine_started_local\\tpayload\\n' > engine-metrics.tsv, then awk -v lo=12627 -v hi=13420 -v R=\"$INSTALL_ROOT\" -f extract.awk \"$ENGINE_LOG\" >> engine-metrics.tsv. The install root is passed in at run time, so neither this manifest nor the program contains an absolute personal path. Syntax note: every condition is on one line because the default awk on this host is mawk, which rejects a condition continued across lines. Re-running extract.awk reproduced this TSV byte for byte at 15 693, at 17 233, at 18 689, at 19 664 and at 20 648 log lines",
+    "program_file": "extract.awk",
+    "program": "see extract.awk in this directory. Its whitelist is: engine_start lines; 'strata generate: expert cache N slots'; 'strata serve: prompt chunk auto'; 'strata mtp: draft layer loaded'; 'strata generate: mtp:' (MTP refusal / allocation failure); 'strata serve: prompt N tokens = …'; and the 'KV streaming', 'decode expert cache hit rate' and 'conversation cache' request counters. Usage text, ggml_cuda_init lines, load_hparams warnings and route-tail-skip counters are not selected",
+    "sanitization_applied": [
+      "absolute paths under the local Strata install root were replaced by <STRATA_INSTALL_ROOT>/ or by install-relative paths",
+      "the engine binary path was replaced by the literal \"strata\"",
+      "pack, model and expert-profile paths were reduced to paths relative to the Strata data root",
+      "no request payload, prompt text, completion text or tool output was selected by the extraction",
+      "the published TSV was re-checked by scanning for absolute paths under the local home directory and for the local username; zero matches"
+    ],
+    "verbatim_note": "selected payload lines are byte-for-byte copies of the log lines after the path substitutions above; no numeric value was edited"
+  },
+  "limitations": [
+    "prompt identity across sessions is inferred from identical prompt token counts (12719 tokens in six sessions — five without MTP and one with MTP; 53 tokens as a warm-up probe in every session); the prompt text itself is private and unpublished",
+    "the cold-prefill figures quoted in docs/findings.md section 1 all come from requests with 0 reused KV tokens, i.e. cold-cache full prefills after an engine restart. This dataset also contains 8 warm requests with reused tokens whose reported 'prefill' rates span 39.6-555.7 tok/s; those are not cold prefills and are excluded from every comparison here",
+    "the sweep is one request per configuration point, except the 12719-token prompt which appears in five no-MTP sessions and one MTP session; those five no-MTP runs span four different argument vectors (--spec 4 with --adapt-async 1 or 0 and --pcie-frac absent or 0.20, and --spec 6 with --adapt-async 1 and --pcie-frac 0.20), so the 529.9-537.5 tok/s band is not a same-configuration repetition band. Only 19:13 and 19:20 share an identical vector (537.5, 537.4); a third launch with that vector measured 527.6 on a 12733-token prompt 1 h 41 min later. Three single-variable pairs exist in this family: --adapt-async 1 vs 0 (18:49:35 vs 18:57:26, 533.7 vs 529.9), --pcie-frac absent vs 0.20 (18:49:35 vs 19:04:16, 533.7 vs 531.9) and --spec 4 vs 6 (19:04:16 vs 19:13:24, 531.9 vs 537.5)", 
+    "the MTP session (20:31:11) does not differ from every no-MTP session that ran the same 12719-token cold prompt by the same number of arguments: its argument vector differs by two flags from 19:13:24 and 19:20:29 (--mtp mtp/rt plus --vram-reserve-mib 768 vs 512), by three from 19:04:16 (also --spec 6 vs 4), by four from 18:49:35 (also --pcie-frac absent vs 0.20) and by five from 18:57:26 (also --adapt-async 1 vs 0). The MTP effect is not isolated against any of them, and the confounding grows the further the comparison moves from 19:13/19:20",
+    "no peak RAM or VRAM measurement was captured for these sessions; only the engine's own self-reported allocations are available",
+    "the machine was concurrently running interactive agent workloads during the sweep; the engine was the only inference process but not the only load"
+  ]
+}

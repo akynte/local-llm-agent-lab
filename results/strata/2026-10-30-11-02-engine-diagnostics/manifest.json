@@ -1,0 +1,106 @@
+{
+  "dataset_id": "strata-20261030-1102-engine-diagnostics",
+  "kind": "engine-log-derived-diagnostics-and-session-census",
+  "license": "CC BY 4.0 for this dataset and manifest (research record; see LICENSE.docs, legal text at https://creativecommons.org/licenses/by/4.0/legalcode); extract.awk in this directory is MIT (see LICENSE)",
+  "schema_status": "provisional (a formal result schema is a Phase 2 deliverable; see docs/architecture.md)",
+  "captured_at_utc": "2026-11-03T11:05:00Z",
+  "timezone": "UTC+04:00; local timestamps in the TSV are engine-written",
+  "purpose": "the engine's own start-up diagnostics and configuration choices, published so that the engine-internal statements quoted in docs/findings.md, engines/strata/tuning.md, engines/strata/troubleshooting.md and docs/hardware.md are traceable to published data instead of to a private log",
+  "measurement_window_local": "2026-10-30 19:22 to 2026-11-02 20:54",
+  "line_window": [1, 13420],
+  "hardware": {
+    "cpu": "Intel Core i7-13620H (10 physical cores, 16 logical, no AVX-512)",
+    "ram_total_bytes": 65788956672,
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "vram_mib": 8188,
+    "vram_bytes": 8585740032,
+    "storage": "NVMe Samsung SSD 990 PRO 2 TB"
+  },
+  "host": { "os": "Ubuntu 26.04.1 LTS (Resolute Raccoon)", "kernel": "Linux 7.0.0-38-generic", "gpu_driver": "595.99.02 (NVIDIA open kernel module)", "cuda_variant": "cuda13" },
+  "engine": {
+    "name": "strata",
+    "versions_in_window": {
+      "0.1.54": { "build_dir": "0.1.54-linux-x86_64-cuda-cuda13", "sessions": 20 },
+      "0.1.55": { "build_dir": "0.1.55-linux-x86_64-cuda-cuda13", "sessions": 37 }
+    },
+    "engine_change_recorded_locally": "2026-10-31T21:13:54Z, build 8c1aea4bca1b+cuda13.0 -> 99866a47a2b8+cuda13.0"
+  },
+  "session_census": {
+    "engine_sessions": 57,
+    "sessions_with_vision_flag": 42,
+    "sessions_requesting_mtp": 25,
+    "kv_quant_per_session": { "int8": 29, "k8v4": 17, "q4_0": 11 },
+    "spec_per_session": { "4": 51, "6": 6 },
+    "vram_reserve_mib_per_session": { "not set": 37, "512": 8, "600": 3, "768": 7, "1024": 2 },
+    "kv_resident_cells_per_session": { "8192": 1, "20480": 20, "24576": 8, "32768": 12, "not set": 16 },
+    "note": "counts are per engine_start record, i.e. per launch, not per measured request"
+  },
+  "engine_internal_values_observed": {
+    "expert_cache_slots_across_sessions": [463, 504, 536, 553, 588, 616, 660, 705, 718, 734, 797, 952, 989, 1039, 1077, 1107, 1110, 1121, 1257],
+    "automatic_prompt_chunk_tokens_across_sessions": [256, 512, 768, 1024, 1280, 1536, 2048, 2304, 2816],
+    "pcie_frac_chosen_by_the_engine_probe": { "0.32": 24, "0.31": 17, "0.30": 1 },
+    "pcie_probe_and_flag_are_disjoint": "joining probe lines to launch vectors per launch: 42 launches logged a probe and passed no --pcie-frac, 15 passed --pcie-frac and logged no probe line, 0 did both, 0 did neither (42 + 15 = 57). The engine probes the link only when the flag is absent, so the probe census and the override census describe complementary populations",
+    "pcie_probe_reported_bandwidth": "42 of the 57 launches logged a PCIe probe line. The best-of-four value ranges 11.0-11.6 GB/s host->device across launches (11.0 x1, 11.1 x1, 11.2 x1, 11.4 x14, 11.5 x20, 11.6 x5); 11.5 is the modal value, not a property of the machine",
+    "conversation_cache_sized_from_free_ram_mib": { "1280": 1, "2560": 2, "2816": 4, "3072": 5, "3328": 3, "3584": 1, "3840": 11 },
+    "conversation_cache_off_launches": "7 launches logged 'conversation cache off: not enough free RAM to park conversations'; 27 logged a sized budget; 23 logged neither line (57 total). The cause of the 23 is U and is not analysed here",
+    "cpu_pool_workers_line": "34 launches logged 'CPU pool: 9 workers by default (10 physical cores, 16 logical processors; bounded by every physical core but the host's)' with 9 pool workers on logical processors 2,4,6,8,10,12,13,14,15 and the host thread on 0. Eight launches passed --pool-workers 6; only two of them (11:31:51 and 11:34:58) reached the point of logging '6 pool workers on logical processors 2,4,6,8,10,1' - five of the eight died on unknown arguments (11:13:40, 11:18:22, 11:21:07, 11:33:48, 11:34:19) and one (11:29:40) logged no worker line at all, so 2 + 5 + 1 = 8",
+    "vram_free_at_request_start_warnings_mib": { "259": 1, "341": 1, "396": 1, "438": 1, "467": 1, "496": 3, "508": 5 },
+    "vram_reserve_advice_in_those_warnings_mib": { "576": 8, "704": 2, "832": 2, "960": 1, "note": "13 warnings, one advice value each; the advice is computed from the launch's own state, so different advice in different launches is not a contradiction" },
+    "prompt_path_borrowed_cache_slots": "between 312 and 1107 CUDA0 cache slots, value logged per session",
+    "cpu_features": { "avx512_absent_logged_launches": 52, "map_hugetlb_unavailable_logged_launches": 36, "note": "52 of 57 launches logged the AVX-512 line; the five that died on unknown arguments did not. 36 of those 52 also logged MAP_HUGETLB unavailable, so 16 launches logged the CPU-feature line without the huge-page line (15 of them with --vision, 1 without; both engine generations). The cause of that 16-launch gap is U: no explanation appears in the published records, and the two counts must not be read as one stage of start-up" }
+  },
+  "mtp_history_across_the_window": {
+    "sessions_requesting_mtp": 25,
+    "logged_outcomes": {
+      "refusals_experts_do_not_fit_in_vram": { "reported_246_MiB_free": 8, "reported_247_MiB_free": 2 },
+      "dense_weights_allocation_failure": 1,
+      "successful_draft_loads_mib": [834, 834, 834, 835, 835, 835, 835, 822],
+      "sessions_with_no_logged_mtp_outcome": 6
+    },
+    "of_the_sessions_with_no_logged_mtp_outcome": "five died on unknown arguments (--kv-streaming x3, --draft-vocab x2); one (2026-11-02 11:00:09) started and logged no MTP line in the selected window",
+    "failure_messages_verbatim": [
+      "mtp: the 512 experts do not fit in VRAM (246 MiB of 7807 MiB VRAM free on this GPU)",
+      "mtp: the 512 experts do not fit in VRAM (247 MiB of 7807 MiB VRAM free on this GPU)",
+      "mtp: dense weights allocation failed (out of memory), requested 110 MiB, CUDA0 free 57 MiB (57 MiB of 7807 MiB VRAM free on this GPU)"
+    ]
+  },
+  "launches_that_never_ran": {
+    "count": 5,
+    "reasons": { "unknown argument: --kv-streaming": 3, "unknown argument: --draft-vocab": 2 },
+    "note": "unsupported claim removed on 2026-11-03: an earlier version of this manifest asserted these names 'existed in the 0.1.54-era configuration'. The published data does not support that. The only published carriers of --kv-streaming and --draft-vocab are the five launches that died on them (11:13:40, 11:18:22, 11:21:07, 11:33:48, 11:34:19); no successfully started launch in this window carried either flag, and none of the 20 0.1.54-era launches carried them. Who set them is U (gap G12 covers the missing argument documentation)"
+  },
+  "source_log": {
+    "role": "Strata engine log for the iq3_xxs-256k launch profile",
+    "published": false,
+    "reason_not_published": "the raw log interleaves request metrics with prompt and completion content from private agent sessions",
+    "windows_published_so_far": {
+      "this_dataset": [1, 13420],
+      "strata-20261102-config-sweep": [12627, 13420],
+      "strata-20261102-mtp-attempts": [9470, 12626]
+    },
+    "size_was_not_monotonic": "see conflict C11 in docs/evidence-inventory.md; line anchors were re-verified on 2026-11-03 by re-extraction and diff"
+  },
+  "extraction": {
+    "tool": "mawk 1.3.4 (this host's default awk); the program is published in this directory as extract.awk and is written with one-line conditions so it runs under mawk",
+    "program_note": "extract.awk takes the install root and the home directory as -v R=… and -v H=… at run time, so the published program contains no absolute personal path. Run: printf 'kind\\tlog_line\\tengine_started_local\\tpayload\\n' > engine-diagnostics.tsv; awk -v lo=1 -v hi=13420 -v R=\"$INSTALL_ROOT\" -v H=\"$HOME_DIR\" -f extract.awk \"$ENGINE_LOG\" >> engine-diagnostics.tsv",
+    "column_semantics": "engine_started_local is the timestamp of the engine launch a record belongs to; records appearing before the first captured 'engine started' line carry the literal value 'no-engine-start-seen' rather than a guessed timestamp",
+    "sanitization_applied": [
+      "absolute paths under the local Strata install root replaced by <STRATA_INSTALL_ROOT>/",
+      "any remaining occurrence of the local home path replaced by <HOME> (zero such occurrences remained in this run)",
+      "the '[strata] <date> <time> engine started: ' prefix stripped, with the timestamp kept as its own column",
+      "no prompt text, completion text, tool output or conversation content is selected by the whitelist"
+    ],
+    "continuation_lines": "multi-line engine messages are published as their first line plus every following indented line, tagged kind=continuation; 108 such lines exist, three per launch for the 36 launches that logged the expert-cache parity note",
+    "record_counts": { "engine_start": 57, "event": 1776, "continuation": 108, "total": 1941 },
+    "tsv_bytes": 308718,
+    "reproduction_check": "re-run with extract.awk at 17 233, at 18 689, at 19 664 and at 20 648 log lines (last on 2026-11-04T00:48:21Z); output byte-for-byte identical to the committed TSV every time"
+  },
+  "limitations": [
+    "this dataset contains no per-request throughput records; throughput lives in the two request datasets",
+    "the 0.1.54-era sessions are covered here at launch and configuration level only; their request records are not published (gap G7)",
+    "the whitelist is a choice, not a complete capture: per-request counters such as route-tail-skip totals, suffix-draft totals and per-request KV-streaming hit rates are deliberately excluded here",
+    "engine diagnostics lines are the engine's own claims about itself; they are measurements of what the engine decided, not independent confirmations that the decision was correct",
+    "'sessions_with_no_logged_mtp_outcome' is an absence of a published line, not proof that MTP did not load",
+    "counts are per launch; a launch is not a measurement"
+  ]
+}
