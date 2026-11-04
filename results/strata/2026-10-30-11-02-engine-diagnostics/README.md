@@ -97,8 +97,13 @@ awk -v lo=1 -v hi=13420 -v R="$INSTALL_ROOT" -v H="$HOME_DIR" \
 
 Run against the private log on 2026-11-03, when the log stood at 17 233 lines, this produced 1 941
 records (57 `engine_start` + 1 776 `event` + 108 `continuation`), 308 718 bytes, with zero occurrences of
-a personal absolute path, and reproduced the committed TSV byte for byte. The same command reproduced it
-byte for byte again at 18 689, at 19 664 and at 20 648 lines (2026-11-04).
+a personal absolute path, and reproduced the committed TSV byte for byte. Since 2026-11-04 the source of
+record is the archived copy of that log (snapshot `2026-11-04T10:29:44Z`, 22 132 lines, 2 839 708 bytes,
+sha256 `c102ade0…a68b9`); the same command with `ENGINE_LOG` pointing at the archived copy reproduces the
+committed TSV byte for byte. The archive is private and is not in this repository — see
+`docs/reproducibility.md` §6 and `manifest.json` under `archive_snapshot`. The same command had already
+reproduced this file byte for byte again at 18 689 and 19 664 lines (2026-11-03) and at 20 648 lines
+(2026-11-04).
 
 The whitelist selects engine start-up and engine-internal decision lines. It does not select request
 lines, and it does not select per-request counters. Records that appear before the first captured

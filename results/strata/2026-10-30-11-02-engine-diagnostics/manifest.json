@@ -80,6 +80,22 @@
     },
     "size_was_not_monotonic": "see conflict C11 in docs/evidence-inventory.md; line anchors were re-verified on 2026-11-03 by re-extraction and diff"
   },
+  "archive_snapshot": {
+    "status": "the private source log was archived off-repo on 2026-11-04 under the procedure in docs/reproducibility.md section 6; the archive is private and never enters this repository",
+    "snapshot_id_utc": "2026-11-04T10:29:44Z",
+    "archived_log_sha256": "c102ade097769c9bc5e101039cbda4eab269ce23543cc2924684dd172e3a68b9",
+    "archived_log_lines": 22132,
+    "archived_log_bytes": 2839708,
+    "snapshot_state": "mid-write: the engine was live during the copy and the log grew from 2837948 to 2839708 bytes in the copy window, so this is a snapshot of a live file rather than a clean stop point",
+    "engine_build_at_snapshot": "0.1.56-linux-x86_64-cuda-cuda13 (control active.json version 0.1.56). The measurements in this dataset were taken under 0.1.54 and 0.1.55, not under this build",
+    "reverified_from_archive": {
+      "window_inclusive": [1, 13420],
+      "rows_produced": 1941,
+      "result": "re-extracted from the archived copy on 2026-11-04 with the committed extract.awk and the same window variables; the diff against the committed engine-diagnostics.tsv printed nothing, i.e. byte-for-byte identity",
+      "tsv_sha256": "95e46eb10c8a44af3a93c661f459c74784439ea7161de1522d8d5fc151d4bff6"
+    },
+    "note": "line numbers in this manifest are anchors into the archived copy, not identifiers. The private directory holding the archive, and the private ARCHIVE.md beside it, are not published and never enter this repository"
+  },
   "extraction": {
     "tool": "mawk 1.3.4 (this host's default awk); the program is published in this directory as extract.awk and is written with one-line conditions so it runs under mawk",
     "program_note": "extract.awk takes the install root and the home directory as -v R=… and -v H=… at run time, so the published program contains no absolute personal path. Run: printf 'kind\\tlog_line\\tengine_started_local\\tpayload\\n' > engine-diagnostics.tsv; awk -v lo=1 -v hi=13420 -v R=\"$INSTALL_ROOT\" -v H=\"$HOME_DIR\" -f extract.awk \"$ENGINE_LOG\" >> engine-diagnostics.tsv",

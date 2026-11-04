@@ -5,7 +5,10 @@ RTX 4060 Laptop 8 GB, running `Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS` at `--max-con
 
 `engine-metrics.tsv` holds the verbatim metric lines the engine wrote for those sessions, with
 local paths sanitized. It was produced by `extract.awk` in this directory, and re-running that program
-over the private log reproduces this file byte for byte. Columns:
+over the archived copy of the private log reproduces this file byte for byte. The archive is private and
+is not in this repository; its identity (`2026-11-04T10:29:44Z`, sha256 `c102ade0…a68b9`, 22 132 lines,
+2 839 708 bytes) and the re-derivation result are recorded in `docs/reproducibility.md` §6 and in
+`manifest.json` under `archive_snapshot`. Columns:
 
 | Column | Meaning |
 | --- | --- |

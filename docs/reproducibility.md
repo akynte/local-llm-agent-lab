@@ -290,6 +290,10 @@ repetition. Both kinds are reported, and they are not the same kind of control.
 
 ### Re-extracting from the private log (owner only)
 
+Since 2026-11-04 the source of record is the **archived copy** of that log (snapshot
+`2026-11-04T10:29:44Z`, engine log sha256 `c102ade0…a68b9`), not the live file; §6 explains why and gives the
+commands against the archive. The window table below is unchanged by that move.
+
 Each dataset's selection program is committed **next to the data it produced**, so the selection is
 auditable rather than asserted:
 
@@ -354,9 +358,10 @@ placeholder shape before concluding anything about the log.
 
 ## 2. Re-verifying the Go exercise
 
-The Go project is **not yet imported** into this repository (no license decision, gap G2 in
-`docs/evidence-inventory.md`). Until it is, this section describes how the owner re-verifies the
-local copy, and what a reader should expect from the eventual import.
+The Go project is **not imported** into this repository, and will not be imported: gap G2 was decided by the
+owner on 2026-11-04 as **reference-only**, with a clean-room reimplementation scheduled instead (tasks T3.7 and
+T3.8 in `docs/implementation-plan.md`). This section therefore describes how the owner re-verifies the local
+copy today, and what a reader should expect from the future clean-room rebuild rather than from this source.
 
 ```sh
 cd <the ratelimit package>
@@ -439,7 +444,7 @@ another run.
 | The mutation-testing evidence | no | performed by the evaluated agent, no retained artifact |
 | MTP effect isolated from `--vram-reserve-mib` | no | no no-MTP session with the same reserve ran a comparable request |
 | Anything about ExLlamaV3 or llama.cpp | no | never run |
-| Why the engine log's line count decreased during the audit | no | observed and unexplained (conflict C11); the log must be archived before further analysis (gap G10) |
+| Why the engine log's line count decreased during the audit | no | observed and unexplained (conflict C11); the log was archived on 2026-11-04 (gap G10 closed), so the explanation now has to be sought in the archived snapshot rather than in the live file |
 
 ## 6. Archiving the private engine log (owner action, decided 2026-11-04)
 
@@ -518,5 +523,25 @@ were omitted.
 
 At 2026-11-04T00:48:21Z the live log stood at 20 648 lines, 2 644 061 bytes, sha256 prefix `147bb441…`, and
 all three datasets re-extracted byte for byte from it. Later checks the same day saw 21 696 lines and the
-same identical re-extraction. **The archive's own numbers are the ones that matter once it exists**, and the
-manifests should be updated to cite the archive snapshot rather than the live file.
+same identical re-extraction.
+
+### The snapshot that was taken
+
+The procedure above was carried out on 2026-11-04. The snapshot's identity is recorded here because it is what
+the published datasets are now re-derived from; the private directory it lives in, and the private `ARCHIVE.md`
+beside it, are not published and never enter this repository.
+
+| Item | Value |
+| --- | --- |
+| Snapshot id (UTC) | `2026-11-04T10:29:44Z` |
+| Archived engine log, sha256 | `c102ade097769c9bc5e101039cbda4eab269ce23543cc2924684dd172e3a68b9` |
+| Archived engine log, size | 22 132 lines, 2 839 708 bytes |
+| Live status at copy time | **mid-write** — the engine was running and the log grew from 2 837 948 to 2 839 708 bytes during the copy window, so this is a snapshot of a live file, not a clean stop point (procedure step 1) |
+| Engine build writing the log at snapshot time | `0.1.56-linux-x86_64-cuda-cuda13`. The archived log contains build-path mentions of `0.1.54` ×20, `0.1.55` ×37 and `0.1.56` ×1; the published measurements come from the 0.1.54 and 0.1.55 sessions |
+| Also archived | the engine's server log (137 608 lines, 10 610 277 bytes), the launch profile and its choices file, a failed tuning record, historical profile backups, the component `active.json`, the tuning `recheck.json`, the 2026-11-02 agent session transcripts, and copies of the two temporary working directories behind sources S13 and S14 |
+| Re-derivation from the archived copy | window 12627–13420 → 134 rows; window 9470–12626 → 233 rows; window 1–13420 → 1 941 rows; all three `diff` outputs empty and byte-for-byte identical to the committed TSV files |
+| Integrity | sha256 recorded for every archived file, verified after the snapshot was made read-only; 25 of 25 checks pass |
+
+**The archive is now the anchor of record and the live log is disposable for audit purposes.** All three
+manifests cite this snapshot, and every line-number anchor in this repository should be re-verified against the
+archived copy rather than against the live file.

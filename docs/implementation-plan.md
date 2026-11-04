@@ -147,16 +147,23 @@ separate Phase 0 exists in this plan.
 - [x] **T1.5 Engine and agent notes.** Files: `engines/strata/{installation,configuration,tuning,troubleshooting}.md`,
   `agents/pi/README.md`.
 - [x] **T1.6 Repository hygiene.** Files: `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `.gitignore`.
-- [ ] **T1.7 License decision.** Owner decision, not an agent decision. See gap G1. Until it is made,
-  no `LICENSE` file exists and `README.md` says so explicitly.
-- [ ] **T1.8 Independent review of Phase 1.** Deliverable: reviewer confirms that no claim in the
-  repository outruns its evidence tag. **Partly done:** one reviewer pass was run and its findings were
-  corrected (T1.2b); a second pass over the corrected text, and the owner's own sign-off, are still
-  outstanding.
-- [x] **T1.9 First commit.** Owner-approved on 2026-11-04. The publication-safety scan in
-  `CONTRIBUTING.md` was run against the staged diff before the commit, and the license files (T1.7) were
-  in the staged set. The commit is **local only**; nothing has been pushed, and pushing remains a separate
-  owner approval.
+- [x] **T1.7 License decision.** Owner decision, made 2026-11-04: MIT for software in `LICENSE`, CC BY 4.0
+  for the research record in `LICENSE.docs` (gap G1 closed), with the reason for the split stated in
+  `README.md`. GitHub's automatic detector reports the combination as "Other" rather than MIT; the owner
+  reviewed that on 2026-11-04 and chose to leave the files as they are, because the terms are stated in the
+  files themselves rather than in a badge.
+- [x] **T1.8 Independent review of Phase 1.** Deliverable: reviewer confirms that no claim in the
+  repository outruns its evidence tag. **Done:** five correction rounds ran in total. The fourth produced
+  7 HIGH / 11 MEDIUM / 8 LOW items and the fifth 3 HIGH / 7 MEDIUM / 8 LOW; every item was independently
+  re-verified against the published TSV data before being corrected or rejected, and the corrections are in
+  these files. The owner's sign-off was given on 2026-11-04 as the decisions recorded against gaps G1, G2 and
+  G10, followed by the approval to push.
+- [x] **T1.9 First commit, then first push.** Owner-approved on 2026-11-04. The publication-safety scan in
+  `CONTRIBUTING.md` was run against the staged diff before the commit, and the license files (T1.7) were in
+  the staged set: 32 files, 6 574 insertions, commit `c3c51ce`. Pushing was a separate approval and was given
+  the same day; `refs/heads/main` now exists on the remote at the same commit hash. The first push attempt was
+  rejected by a GitHub-side internal server error and the retry succeeded — expect that failure mode in this
+  environment rather than reading it as a repository problem.
 
 ---
 
@@ -190,13 +197,19 @@ conftest.py                         fixture datasets under tests/fixtures/
 across seven observations during the audit (conflict C11). The 0.1.54-era records exist only inside that
 file.
 
-- [ ] Step 1: copy the log to a private archive location outside the engine's state directory, record its
-  sha256 / line count / byte count in a private note, and confirm the copy is not in any path a future
-  `git add -A` could reach.
-- [ ] Step 2: re-run both published extractions against the archived copy and diff against the committed
-  TSV files; expect byte-for-byte identity.
-- [ ] Step 3: record the archive's identity in `docs/evidence-inventory.md` S1 without publishing the
-  archive itself.
+- [x] Step 1: the log was copied (not moved) into a private archive directory outside the engine's state
+  directory and outside anything `git add -A` can reach, with sha256, line count and byte count recorded in a
+  private `ARCHIVE.md` beside it. Snapshot id `2026-11-04T10:29:44Z`; engine log 22 132 lines,
+  2 839 708 bytes, sha256
+  `c102ade097769c9bc5e101039cbda4eab269ce23543cc2924684dd172e3a68b9`; taken **mid-write** while the engine
+  was live, which is recorded rather than hidden.
+- [x] Step 2: all three published extractions were re-run against the archived copy and diffed against the
+  committed TSV files — windows 12627–13420 (134 rows), 9470–12626 (233 rows) and 1–13420 (1 941 rows), each
+  diff empty, i.e. byte-for-byte identity. Note that **both** extractions were re-run, not only the two that
+  this task originally named.
+- [x] Step 3: the archive's identity is recorded in `docs/evidence-inventory.md` S1 and in
+  `docs/reproducibility.md` §6 without publishing the archive: snapshot id, sha256, line and byte counts, the
+  engine build that was writing it, and the re-derivation result. No personal absolute path appears anywhere.
 
 ### Task 2.1 — Log extraction
 
@@ -298,7 +311,8 @@ performance numbers.**
 
 ### Task 2.7 — Extract the 2026-10-30 → 2026-11-01 sessions (gap G7)
 
-**Depends on:** Task 2.0. Without an archived snapshot this data may no longer be reachable.
+**Depends on:** Task 2.0, which is satisfied: the archived snapshot recorded in `docs/reproducibility.md` §6
+holds the 0.1.54-era records, so this extraction runs against the archive rather than the live log.
 
 - [ ] Step 1: extract the 0.1.54-era window (20 engine sessions; **678 request records counted in the
   private log, a figure no published dataset can reproduce until it is extracted**) as its own dataset

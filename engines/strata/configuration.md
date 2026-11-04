@@ -17,8 +17,11 @@ is not a record of what the engine ran.
 
 ## The engine vector as recorded
 
-Captured from the launch profile in force at audit (2026-11-02 20:54 local, still running at the time
-of the Phase 0 audit), with install-root paths removed:
+Captured from the launch profile in force at audit (2026-11-02 20:54 local), with install-root paths removed.
+This is a **dated capture, not a current-state claim**: when the private log was archived on 2026-11-04 the
+engine had been updated to 0.1.56 and the live vector used `--kv k8v4`, while every published 2026-11-02
+measurement in `results/` was taken under `--kv q4_0`. Each dataset records its own argument vector in its
+manifest, and no claim in this repository depends on what the engine is configured to do today.
 
 ```
 strata --serve

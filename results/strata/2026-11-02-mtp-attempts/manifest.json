@@ -139,6 +139,22 @@
   },
   "repetitions": { "identical_prompt_repetitions_present": true, "detail": "four repetition groups live in the 10:00:17 session, which ran the 16387-token prompt three times (388.7 / 390.4 / 390.7, 0.51% spread), the 4093-token prompt three times (360.2 / 375.1 / 377.3, 4.75%), the 4089-token prompt twice (362.4 / 382.5, 5.55%) and a 77-token prompt three times (52.2 / 54.0 / 87.2, 67.05%); 4089 and 4093 are two distinct prompts, not one prompt run five times. The 15:17:33 session ran 16991 and 16993 tokens, which are also two distinct prompts and not a repetition" },
   "peak": { "ram_bytes": null, "vram_bytes": null, "sampled_every_s": null, "note": "not captured; only engine self-reported allocations exist" },
+  "archive_snapshot": {
+    "status": "the private source log was archived off-repo on 2026-11-04 under the procedure in docs/reproducibility.md section 6; the archive is private and never enters this repository",
+    "snapshot_id_utc": "2026-11-04T10:29:44Z",
+    "archived_log_sha256": "c102ade097769c9bc5e101039cbda4eab269ce23543cc2924684dd172e3a68b9",
+    "archived_log_lines": 22132,
+    "archived_log_bytes": 2839708,
+    "snapshot_state": "mid-write: the engine was live during the copy and the log grew from 2837948 to 2839708 bytes in the copy window, so this is a snapshot of a live file rather than a clean stop point",
+    "engine_build_at_snapshot": "0.1.56-linux-x86_64-cuda-cuda13 (control active.json version 0.1.56). The measurements in this dataset were taken under 0.1.54 and 0.1.55, not under this build",
+    "reverified_from_archive": {
+      "window_inclusive": [9470, 12626],
+      "rows_produced": 233,
+      "result": "re-extracted from the archived copy on 2026-11-04 with the committed extract.awk and the same window variables; the diff against the committed engine-metrics.tsv printed nothing, i.e. byte-for-byte identity",
+      "tsv_sha256": "8bc104e121e7d392ea2dd18da037a14df733ba456f88c9a40d178efd60ced1af"
+    },
+    "note": "line numbers in this manifest are anchors into the archived copy, not identifiers. The private directory holding the archive, and the private ARCHIVE.md beside it, are not published and never enter this repository"
+  },
   "limitations": [
     "this is not a controlled experiment; it is the recorded history of interactive configuration attempts made during a working day",
     "the KV quantization (int8 / k8v4 / q4_0), the vision state and --spec differ between sessions in this window and between this window and the evening sweep, so cross-session comparisons are confounded on several variables at once",

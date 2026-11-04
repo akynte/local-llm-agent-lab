@@ -136,9 +136,11 @@ would catch an incomplete submission is Phase 2 work.
 - **The Go exercise is reference-only** (T3.8): it has no license, no remote, and lives in a temporary
   directory, so nothing is imported. T3.8 rebuilds it clean-room from the published task specification under
   this repository's licenses, with independent tests and retained artifacts.
-- **The private engine log is archived now**, privately and off-repo, from a frozen snapshot (gap G10). The
-  procedure, the commands and the verification step are published in `docs/reproducibility.md` §6; the copy
-  itself is an owner action and its contents never enter this repository.
+- **The private engine log is archived**, privately and off-repo, from a frozen snapshot (gap G10, closed
+  2026-11-04). The snapshot is `2026-11-04T10:29:44Z`: engine log 22 132 lines / 2 839 708 bytes, sha256
+  `c102ade0…a68b9`, taken mid-write. All three published datasets were re-derived from it byte for byte. The
+  procedure, the commands and the verification result are published in `docs/reproducibility.md` §6; the copy
+  itself is private and its contents never enter this repository.
 
 ### Still awaiting an environment, not a decision
 

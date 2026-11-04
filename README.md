@@ -8,14 +8,16 @@ This is a personal research record turned into an open project. It is not a benc
 is not a product, and it is not affiliated with, endorsed by, or sponsored by the authors of any engine,
 model or agent discussed here.
 
-**Status:** Phase 1 (evidence audit and repository foundation) is written, two independent reviewer passes
-were run and their findings corrected into these files, and the mechanical validation is clean. The owner
-decisions recorded on 2026-11-04 are implemented: dual licensing (MIT for code, CC BY 4.0 for the research
-record), the Go exercise kept reference-only until Phase 4, and the private engine log archived off-repo by
-the owner. A **local initial commit** exists; **nothing has been pushed**, and Phase 2 tooling has not
-started. Three datasets exist, all from one machine; two of them come from a single day. **No engine
-comparison exists** — ExLlamaV3, llama.cpp, ik_llama.cpp and KTransformers have not been run, and nothing in
-this repository compares them.
+**Status:** Phase 1 (evidence audit and repository foundation) is written. It went through five correction
+rounds, the last two of them driven by independent reviewer agents, and every finding from those passes was
+re-verified against the published data before being corrected into these files; the mechanical validation is
+clean. The owner decisions recorded on 2026-11-04 are implemented: dual licensing (MIT for code, CC BY 4.0 for
+the research record), the Go exercise kept reference-only until Phase 4, and the private engine log archived
+off-repo from a frozen snapshot whose identity and verification result are recorded in
+`docs/reproducibility.md` §6. The initial commit `c3c51ce` was made on 2026-11-04 and **pushed to `main` the
+same day**. Phase 2 tooling has not started. Three datasets exist, all from one machine; two of them come from
+a single day. **No engine comparison exists** — ExLlamaV3, llama.cpp, ik_llama.cpp and KTransformers have not
+been run, and nothing in this repository compares them.
 
 ---
 

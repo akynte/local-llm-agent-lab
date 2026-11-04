@@ -10,8 +10,9 @@ dataset, and it exists because it contradicts the easiest reading of the evening
 
 `engine-metrics.tsv` was produced by `extract.awk` in this directory, whose whitelist is **narrower**
 than the evening dataset's: it omits the `KV streaming:`, `decode expert cache hit rate:` and
-`conversation cache:` request counters. Re-running that program over the private log reproduces this file
-byte for byte.
+`conversation cache:` request counters. Re-running that program over the archived copy of the private log
+(snapshot `2026-11-04T10:29:44Z`, recorded in `docs/reproducibility.md` §6 and in `manifest.json` under
+`archive_snapshot`) reproduces this file byte for byte.
 
 ## What is in it
 
