@@ -132,7 +132,10 @@ would catch an incomplete submission is Phase 2 work.
 
 - **License for this repository** (T1.7): MIT for software in `LICENSE`, CC BY 4.0 for the research record in
   `LICENSE.docs`. Previously "not assumed by this project"; now chosen, with the reason for the split stated
-  in `README.md`.
+  in `README.md`. On **2026-11-05** this was made an explicit **file-level policy** (T1.11): the enumerated
+  file list, MIT covering executable source including its operational comments, SPDX notices on MIT-class
+  files, and `scripts/validate.py` check [8] enforcing the classification. That decision closed conflict C25
+  and gap G15, and left both standard license texts unamended.
 - **The Go exercise is reference-only** (T3.8): it has no license, no remote, and lives in a temporary
   directory, so nothing is imported. T3.8 rebuilds it clean-room from the published task specification under
   this repository's licenses, with independent tests and retained artifacts.

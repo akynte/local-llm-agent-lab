@@ -1,4 +1,7 @@
 #!/bin/sh
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2026 akynte (see the copyright line in LICENSE)
+#
 # CPU-only validation entry point for local-llm-agent-lab.
 #
 #   sh scripts/validate.sh              full validation of the published record

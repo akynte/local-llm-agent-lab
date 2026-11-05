@@ -1,4 +1,6 @@
 name: validate published record
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2026 akynte (see the copyright line in LICENSE)
 
 # CPU-only. This workflow runs no model, no inference engine, no benchmark and no GPU job, and it
 # requires no secrets, no network access and no private archive. See SECURITY.md.

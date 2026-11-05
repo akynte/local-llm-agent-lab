@@ -20,8 +20,9 @@ CPU-only. No engine, no model weights, no GPU, no private log, no network. It ru
 regression tests, checks the structure and record counts of all three published datasets, checks each
 manifest's declared sha256 and extraction window against the file beside it, **recomputes 34 published
 figures straight from the published TSVs**, scans tracked text for personal paths and credential-shaped
-strings, and confirms the three `extract.awk` programs fail loudly on a bad invocation. GitHub Actions runs
-the same thing on every push (`.github/workflows/validate.yml`).
+strings, classifies every tracked file under the file-level licensing policy in `LICENSE`, and confirms the
+three `extract.awk` programs fail loudly on a bad invocation. GitHub Actions runs the same thing on every
+push (`.github/workflows/validate.yml`).
 
 34 of 34 published figures currently reproduce from the committed data. That number is the point of this
 repository: a reader should not have to trust a table.
@@ -45,6 +46,11 @@ tasks T3.7/T3.8), and the private engine log archived off-repo from a snapshot w
 verification result are recorded in [`docs/reproducibility.md`](docs/reproducibility.md) §6. That snapshot
 was taken **mid-write** — the engine was live and the log grew by 1 760 bytes during the copy — so it is a
 fixed copy of a live file, not a clean engine stop point.
+
+A further owner decision on **2026-11-05** turned the dual license into an explicit **file-level policy**,
+with the enumerated file list, the SPDX notices on the MIT-class files, and the enforcement check recorded
+in `LICENSE` (§"Scope of this file"). That decision closed conflict **C25** and gap **G15**; see
+[`docs/evidence-inventory.md`](docs/evidence-inventory.md) §6.3.
 
 ---
 
@@ -240,9 +246,10 @@ This section exists because it is the most transferable output of the project.
 
 Phase 1 went through five correction rounds, the last two driven by independent reviewer agents. A further
 audit pass on **2026-11-05** found **fourteen** more discrepancies, recorded as conflicts **C13–C26** in
-[`docs/evidence-inventory.md`](docs/evidence-inventory.md). Thirteen were corrected in that pass; one — the
-tension between the MIT grant text and its own scope note over documentation — was **left open for an owner
-decision** rather than resolved unilaterally. They include:
+[`docs/evidence-inventory.md`](docs/evidence-inventory.md). Thirteen were corrected in that pass; the
+fourteenth — the licensing scope conflict **C25** — was left open there rather than resolved unilaterally,
+then **closed later the same day by an explicit owner decision** that wrote the file-level policy into
+`LICENSE`. They include:
 
 - a `results/README.md` claim that all three datasets had been re-derived at five log sizes, where the
   diagnostics manifest recorded four (C13);
@@ -261,7 +268,14 @@ decision** rather than resolved unilaterally. They include:
 - a warm-request table that published four of eight records while quoting a band only all eight produce
   (C22);
 - five internal cross-references pointing at section numbers that do not exist (C23);
-- a hardware row asserting GPU co-residency that its own captured command contradicts (C24).
+- a hardware row asserting GPU co-residency that its own captured command contradicts (C24);
+- a dual-license split that no file actually declared: the MIT grant text spoke of "this software and
+  associated documentation files", the scope note carved documentation back out, and the extractor programs
+  carried research prose inside files all three manifests called MIT (C25, gap G15). Resolved by the
+  owner's file-level policy: MIT covers executable source **including its operational comments**, CC BY 4.0
+  covers documentation, datasets, manifests and analytical prose, and the research commentary that had
+  accumulated inside the extractor programs moved into the dataset `README.md` beside each program. The MIT
+  and CC BY texts themselves were not amended.
 
 **No published record, number or measurement window was changed by any of this.** The corrected extraction
 programs reproduce all three committed TSVs byte for byte: 134 / 233 / 1 941 records, sha256
@@ -298,24 +312,39 @@ not exist yet.
 
 ## License
 
-This repository is **dual-licensed**, decided by the owner on 2026-11-04 (gap G1).
+This repository is **dual-licensed**, and the split is now defined **file by file**.
 
-- **Software** — scripts, the `extract.awk` extractors committed beside every dataset, parsers, validators,
-  schemas, CI workflow definitions and any program code added by later phases: **MIT**, in `LICENSE`.
-- **Research record** — `docs/`, `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, the engine and agent
-  write-ups, and the datasets under `results/` (`.tsv` extracts, `manifest.json` metadata and the derived
-  tables and analyses): **CC BY 4.0**, in `LICENSE.docs`, whose legal text is incorporated by reference at
+- **MIT** — the executable source files and *the operational comments inside them*: `scripts/`,
+  `tests/extract/`, `.github/workflows/validate.yml`, `results/strata/*/extract.awk`, `.gitignore`, and any
+  later-phase file matching the extension-and-path rule in `LICENSE` (which includes a future clean-room Go
+  implementation). Each of these files carries `SPDX-License-Identifier: MIT`.
+- **CC BY 4.0** — the research record: every `.md` file in the repository (`docs/`, `README.md`,
+  `CONTRIBUTING.md`, `SECURITY.md`, `engines/`, `agents/`, each dataset `README.md`), every `.tsv` record
+  extract under `results/`, every `manifest.json` under `results/`, and the tables, findings and analyses
+  derived from them. The legal text is incorporated by reference at
   <https://creativecommons.org/licenses/by/4.0/legalcode>.
+- **Scope-neutral** — `LICENSE` and `LICENSE.docs` themselves: they are the license statements that define
+  the terms for the other two classes.
+
+The enumerated list, the definition of an operational comment, and the rule for future files are in
+`LICENSE` §"Scope of this file". `sh scripts/validate.sh` check [8] enforces it: it classifies every
+tracked file, fails if one falls outside all three classes, fails if an MIT-class file lacks its SPDX
+notice, fails if a CC BY file carries an MIT notice, and fails if either standard license text has been
+altered.
 
 The split exists because the measurement records are meant to be reused **with attribution to this project**
 while the tooling is meant to be reused freely. `LICENSE.docs` states the required credit form and the two
 reuse limits that matter most here: the published extracts are sanitized metric records, not raw logs, and a
 single-run observation does not become a verified result because someone reused it.
 
-One known rough edge is recorded rather than papered over: the MIT grant text licenses "this software and
-associated documentation files" while `LICENSE`'s own scope note assigns documentation prose to CC BY 4.0, and
-the `extract.awk` files contain research prose in their comments. `LICENSE`'s mixed-file rule is the reading
-this repository applies day to day (conflict C25, gap G15), and an owner decision is outstanding.
+One consequence is worth stating plainly, because it is the thing that made the split ambiguous before
+2026-11-05: **research commentary is CC BY material even when it sits inside a source file.** Rather than
+leave it there, the historical and analytical notes that had accumulated in the three `extract.awk` headers
+were moved into the `README.md` of the dataset each program produced. The programs now carry usage,
+required variables, exit statuses, selection rules and sanitization rules — operational comments — and
+nothing about the history of the tooling's defects. That history is still published, in
+`docs/reproducibility.md` §1, in conflict **C17** and §6.3 of `docs/evidence-inventory.md`, and as synthetic
+cases in `tests/extract/`.
 
 The Go rate-limiter exercise discussed in `docs/findings.md` §4 is **not** published here. It has no license,
 no remote, and lives outside this repository. The owner decision (gap G2) is **reference-only**, and the

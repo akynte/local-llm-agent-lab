@@ -21,11 +21,14 @@ Rules that apply to everything in this directory:
 3. **No model weights.** Model files are referenced by name, byte size and sha256, never committed.
 4. **Derived numbers are not stored here.** Tables, charts and averages belong in `docs/findings.md`
    or in generated output; this directory holds what was actually measured.
-5. **Licensed for reuse, with attribution.** The datasets and manifests in this directory are CC BY 4.0
-   (`LICENSE.docs`); the `extract.awk` programs beside them are MIT (`LICENSE`). Each manifest carries a
-   `license` field. `LICENSE.docs` states the required credit form and the two limits that matter most for
-   measurement data: these are sanitized extracts rather than raw logs, and reusing a single-run observation
-   does not make it a verified result.
+5. **Licensed for reuse, with attribution.** In each dataset directory, `engine-metrics.tsv` /
+   `engine-diagnostics.tsv`, `manifest.json` and `README.md` are CC BY 4.0 (`LICENSE.docs`); the
+   `extract.awk` beside them is MIT (`LICENSE`), with `SPDX-License-Identifier: MIT` in its header. The
+   file-by-file rule is `LICENSE` §"Scope of this file", and `sh scripts/validate.sh` check [8] enforces it.
+   Each manifest carries a `license` field naming both classes for that directory, because `.tsv` and JSON
+   have no comment syntax to carry an inline notice. `LICENSE.docs` states the required credit form and the
+   two limits that matter most for measurement data: these are sanitized extracts rather than raw logs, and
+   reusing a single-run observation does not make it a verified result.
 
 ## Current datasets
 

@@ -164,6 +164,29 @@ separate Phase 0 exists in this plan.
   the same day; `refs/heads/main` now exists on the remote at the same commit hash. The first push attempt was
   rejected by a GitHub-side internal server error and the retry succeeded — expect that failure mode in this
   environment rather than reading it as a repository problem.
+- [x] **T1.10 Audit pass of 2026-11-05.** Read the extraction programs and the manifests against the data
+  they produced, re-derived all three datasets from the archived copy, recomputed the published figures from
+  the published TSVs, and corrected fourteen further discrepancies (conflicts **C13–C26**, gaps **G13–G16**,
+  and §6.1 / §6.2 of `docs/evidence-inventory.md`). Three confirmed tooling defects were fixed in all three
+  `extract.awk` programs: caller-supplied paths passed to `gsub` as regular expressions, a zero-record window
+  that exited 0, and no validation of the required `-v` variables. No published record, number or window was
+  changed; the corrected programs reproduce all three committed TSVs byte for byte.
+- [~] **Narrow validation tooling, 2026-11-05 — not Task 2.2.** `scripts/validate.sh`, `scripts/validate.py`,
+  `tests/extract/run_tests.sh` and `.github/workflows/validate.yml` exist. They check dataset structure,
+  manifest consistency, 34 published figures recomputed from the TSVs, publication safety over tracked text,
+  file-level licensing classification, and extraction-program behaviour on synthetic fixtures. They are
+  **not** the Phase 2 harness: there is no `Record` dataclass, no `schemas/`, no `normalize.py`, no
+  `compare.py`, no `render.py`, no resource sampler and no benchmark runner. Task 2.2 remains open, and
+  `scripts/validate.py` is a starting point for its `validate_dataset` interface rather than that interface
+  implemented.
+- [x] **T1.11 File-level licensing policy.** Owner decision, 2026-11-05, closing conflict **C25** and gap
+  **G15**. `LICENSE` now defines "the Software" file by file: MIT covers executable source **including the
+  operational comments inside it**, CC BY 4.0 covers documentation, datasets, manifests and analytical prose,
+  and `LICENSE` / `LICENSE.docs` are scope-neutral. Both standard license texts are preserved unamended —
+  verified by `scripts/validate.py` check [8], which also classifies every tracked file and fails on an
+  unclassified file, a missing SPDX notice on an MIT-class file, or an MIT notice on a CC BY file. The
+  research commentary that had accumulated in the three `extract.awk` headers was moved into the `README.md`
+  of the dataset each program produced; no program behaviour and no dataset byte changed.
 
 ---
 
@@ -392,7 +415,9 @@ in this phase may produce a comparison table before the runs exist.
    comparison → Phase 4. Publication → Phase 5. Security and privacy → global constraints,
    `SECURITY.md`, `CONTRIBUTING.md`, T2.1 sanitization, and the Review Focus item 3. Licensing →
    **decided for this repository on 2026-11-04** (MIT for software in `LICENSE`, CC BY 4.0 for the research
-   record in `LICENSE.docs`); the Go exercise is reference-only until T3.8 rebuilds it clean-room.
+   record in `LICENSE.docs`) and **made file-level on 2026-11-05** (T1.11: the enumerated file list, SPDX
+   notices on MIT-class files, and check [8] enforcing it); the Go exercise is reference-only until T3.8
+   rebuilds it clean-room.
 2. **Step scan.** Each step states one action. Phase 1 tasks are recorded as complete with the
    evidence that proves them rather than with steps to redo.
 3. **Type consistency.** `Record`, `to_records`, `validate_dataset`, `config_hash`, `eligibility` and

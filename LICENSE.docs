@@ -2,11 +2,22 @@ Creative Commons Attribution 4.0 International (CC BY 4.0)
 
 Copyright (c) 2026 akynte
 
-Applies to: the research record of this repository — the documentation in
-`docs/`, `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, the case-study and
-engine write-ups in `engines/` and `agents/`, and the published measurement
-datasets in `results/` (`.tsv` record extracts, `manifest.json` metadata, and
-any derived table, figure or analysis published alongside them).
+Applies to: **the research record** — class 2 of the file-level licensing policy in
+`LICENSE`. Concretely: every `.md` file in this repository (`docs/`, `README.md`,
+`CONTRIBUTING.md`, `SECURITY.md`, the case-study and engine write-ups in `engines/` and
+`agents/`, `results/README.md` and each dataset `README.md`), every `.tsv` record extract
+under `results/`, every `manifest.json` under `results/`, and any table, figure, finding,
+evidence classification or derived analysis published alongside them.
+
+It does **not** apply to the executable source files of class 1 (`scripts/`, `tests/`,
+`results/strata/*/extract.awk`, `.github/workflows/`, `.gitignore`), which are MIT, nor to
+the two license files themselves, which are scope-neutral. The full rule, the enumerated
+file list and the SPDX marker requirement are in `LICENSE` §"Scope of this file".
+
+Research commentary belongs to this license even when it used to sit inside a source
+file: on 2026-11-05 the historical and analytical commentary in the `extract.awk` headers
+was moved into the dataset `README.md` beside each program, so that the MIT-class files
+carry only operational comments. See `docs/evidence-inventory.md` §6.2.
 
 The full legal text of the license is incorporated by reference and is the
 authoritative version:
@@ -54,4 +65,7 @@ restated here because they are the most common misuse of this data:
    it does not upgrade an **X**-class observation into a verified result.
 
 The software in this repository is licensed under the MIT license instead; see
-`LICENSE`.
+`LICENSE` and its file-level scope section. A dataset directory therefore contains files
+under **both** licenses, and each dataset's `manifest.json` names them file by file: the
+`.tsv` record extract, the `manifest.json` and the dataset `README.md` are CC BY 4.0;
+the `extract.awk` beside them is MIT.

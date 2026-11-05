@@ -110,3 +110,21 @@ lines, and it does not select per-request counters. Records that appear before t
 `engine started` line carry `no-engine-start-seen` in the timestamp column instead of a guessed time —
 the log's head belongs to a launch whose start line is no longer in the file (conflict C11 in
 `docs/evidence-inventory.md`).
+
+**Licensing note (2026-11-05).** `extract.awk` is **MIT**; this README, `manifest.json` and
+`engine-diagnostics.tsv` are **CC BY 4.0**, under the file-level rule in `LICENSE` (§"Scope of this file"),
+which `sh scripts/validate.sh` check [8] enforces. On 2026-11-05 the research commentary that had
+accumulated in the program's header comments was moved out of the program, so that the MIT-class file
+carries only operational comments; the failure modes of the superseded `gsub(R, …)` form are enumerated in
+`docs/reproducibility.md` §1, recorded as conflict **C17** in `docs/evidence-inventory.md`, and reproduced
+by synthetic cases in `tests/extract/run_tests.sh`. No program behaviour changed and this dataset's bytes
+are unchanged.
+
+Two properties of **this dataset** that used to be stated inside the program belong here. This program
+substitutes with the placeholder form, unlike the two request programs, which strip the install root into
+relative paths:
+
+- 263 of the 1 941 records contain `<STRATA_INSTALL_ROOT>` (516 occurrences in total).
+- **No** record contains `<HOME>`. Window 1–13420 contains no home-directory path, so `-v H=`, although the
+  program requires it and refuses to run without it, substitutes nothing for this window. A reader who
+  re-extracts a different window should not infer from this file that home paths were ever present.

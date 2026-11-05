@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2026 akynte (see the copyright line in LICENSE)
+#
 # Extraction program for results/strata/2026-10-30-11-02-engine-diagnostics/engine-diagnostics.tsv
 #
 # Usage (all four variables are required; the program refuses to run without them):
@@ -23,10 +26,9 @@
 #
 # Sanitization is literal and boundary-aware, not regular-expression based: R and H are supplied by a
 # caller, so they are matched with index() and only where they begin a path and end at a path boundary.
-# Treating them as regular expressions (which earlier versions of this program did) makes a root
-# containing . + ( ) [ ] * ? interpret itself: "." over-matches a different directory, "+" and "("
-# silently stop the substitution working, and an empty value inserts the placeholder between every
-# character of every payload.
+# A caller-supplied value is never handed to the regular-expression engine. The history of why that rule
+# exists, and the failure modes it prevents, are research findings and are recorded in this directory's
+# README.md and in docs/evidence-inventory.md conflict C17.
 #
 # The published-path guard is (a) a defensive assertion that neither supplied root still stands as a
 # complete path in a payload, and (b) a fixed list of home-directory roots (/home/, /Users/, /root/, /mnt/,

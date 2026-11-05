@@ -116,3 +116,31 @@ experiment.
 - Draft-acceptance totals are sums of the engine's own per-request counters.
 - `--vram-reserve-mib` was not set in some sessions, which is recorded as "not set" rather than as a
   value.
+
+## Extraction program, and a licensing note
+
+`extract.awk` in this directory is **MIT**; this README, `manifest.json` and `engine-metrics.tsv` are
+**CC BY 4.0**. The file-level rule that decides which file falls under which license is in `LICENSE`
+(§"Scope of this file"), and `sh scripts/validate.sh` check [8] enforces it rather than asserting it.
+
+On 2026-11-05 the research commentary that had accumulated in the program's header comments was moved out
+of the program and into this file, so that the MIT-class file carries only operational comments — usage,
+required `-v` variables, exit statuses, the selection whitelist, and the sanitization rule. Nothing was
+deleted, no program behaviour changed, and this dataset's bytes are unchanged.
+
+Two statements that used to live in the program are statements about **this dataset**, not about the
+program, which is why they live here:
+
+- No payload in this window contains the `<STRATA_INSTALL_ROOT>` placeholder: every install-root path the
+  window matched was covered by one of the three specific stripping rules, so paths appear install-relative
+  (`models/…`). That is a property of the lines in window 9470–12626, not of the program — the generic
+  `R "/"` rule does emit the placeholder form, and the diagnostics dataset uses it.
+- The evening dataset's window (`../2026-11-02-config-sweep/`) selects the same MTP refusal and
+  allocation-failure rules this one does, but **contains no such line**. All six refusals, the one
+  dense-weights allocation failure and the three successful 835 MiB loads recorded in this file come from
+  this window.
+
+Why the program substitutes literally instead of with a regular expression is a research finding: the
+failure modes of the earlier `gsub(R, …)` form are enumerated in `docs/reproducibility.md` §1 and recorded
+as conflict **C17** in `docs/evidence-inventory.md`, and the synthetic cases that reproduce each one are in
+`tests/extract/run_tests.sh`.

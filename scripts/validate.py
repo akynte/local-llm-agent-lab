@@ -8,6 +8,10 @@ engine log and no network access. It answers three questions and no more:
   2. Do the numbers quoted in docs/ recompute from the published TSVs?
   3. Do the committed extraction programs behave as documented, on synthetic fixtures?
 
+A fourth block reports the file-level licensing classification defined in LICENSE §"Scope of this file":
+which tracked file is MIT, which is CC BY 4.0, whether the MIT-class files carry their SPDX notice, and
+whether both standard license texts are intact.
+
 It deliberately does NOT benchmark anything, does not run the engine, and does not evaluate a model.
 Re-running the extraction against the private log is available only through --reextract, which reads a
 path you pass it and is never part of CI.
@@ -19,6 +23,9 @@ Usage:
 
 Exit status: 0 all checks passed; 1 at least one failed; 2 usage error.
 """
+
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2026 akynte (see the copyright line in LICENSE)
 
 import argparse
 import hashlib
@@ -383,9 +390,92 @@ def check_publication_safety():
           " secret that was already published before this script existed.")
 
 
-# --------------------------------------------------------------------------- 8. extract regression tests
+# --------------------------------------------------------------------------- 8. licensing
+MIT_TEXT_MARKERS = [
+    "Permission is hereby granted, free of charge, to any person obtaining a copy",
+    "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND",
+]
+MIT_EXTS = (".awk", ".py", ".sh", ".yml", ".yaml", ".go", ".json")
+MIT_DIRS = ("scripts/", "tests/", "schemas/", ".github/")
+# A *declaration* is a line that asserts the identifier, optionally behind that file format's comment
+# marker. A sentence that merely quotes the identifier mid-line (which several CC BY documents here do,
+# because they explain the policy) is not a declaration and must not be read as one.
+SPDX_DECL_RE = r"(?m)^[ \t]*(<!--|#|//)?[ \t]*SPDX-License-Identifier:[ \t]*([^ \t,\r\n]+)"
+COPYRIGHT_DECL_RE = r"(?m)^[ \t]*(<!--|#|//)?[ \t]*SPDX-FileCopyrightText:"
+
+
+def declarations(text):
+    return [m.group(2) for m in re.finditer(SPDX_DECL_RE, text)]
+
+
+def classify(path):
+    """File-level license class per LICENSE §"Scope of this file": MIT, CC-BY, NEUTRAL, or None."""
+    ext = os.path.splitext(path)[1]
+    if path in ("LICENSE", "LICENSE.docs"):
+        return "NEUTRAL"
+    if path == ".gitignore":
+        return "MIT"
+    if path.endswith("extract.awk"):
+        return "MIT"
+    if ext in MIT_EXTS and path.startswith(MIT_DIRS):
+        return "MIT"
+    if ext in (".md", ".tsv"):
+        return "CC-BY"
+    if ext == ".json" and path.startswith("results/"):
+        return "CC-BY"
+    return None
+
+
+def check_licensing():
+    print("\n[8] file-level licensing policy (LICENSE §\"Scope of this file\")")
+    tracked = subprocess.run(["git", "-c", "core.quotepath=false", "ls-files"], cwd=ROOT,
+                             capture_output=True, text=True).stdout.split("\n")
+    tracked = [t for t in tracked if t]
+    cls = {t: classify(t) for t in tracked}
+    counts = {}
+    for t, c in cls.items():
+        counts[c or "UNCLASSIFIED"] = counts.get(c or "UNCLASSIFIED", 0) + 1
+    check("every tracked file falls into exactly one license class", not [t for t, c in cls.items() if c is None],
+          "unclassified: " + ", ".join(t for t, c in cls.items() if c is None))
+    print("       " + "  ".join(f"{k}={v}" for k, v in sorted(counts.items())))
+
+    mit_files = sorted(t for t, c in cls.items() if c == "MIT")
+    missing = [t for t in mit_files if "MIT" not in declarations(open(os.path.join(ROOT, t), encoding="utf-8").read())]
+    check("every MIT-class file declares SPDX-License-Identifier: MIT on its own line", not missing, ", ".join(missing))
+    nomark = [t for t in mit_files if not re.search(COPYRIGHT_DECL_RE, open(os.path.join(ROOT, t), encoding="utf-8").read())]
+    check("every MIT-class file declares an SPDX copyright line", not nomark, ", ".join(nomark))
+
+    cc = sorted(t for t, c in cls.items() if c == "CC-BY")
+    clash = [t for t in cc if "MIT" in declarations(open(os.path.join(ROOT, t), encoding="utf-8", errors="replace").read())]
+    check("no CC BY-class file declares an MIT license", not clash, ", ".join(clash))
+
+    lic = open(os.path.join(ROOT, "LICENSE"), encoding="utf-8").read()
+    docs = open(os.path.join(ROOT, "LICENSE.docs"), encoding="utf-8").read()
+    check("the MIT permission notice in LICENSE is the standard text, unamended",
+          all(m in lic for m in MIT_TEXT_MARKERS),
+          "missing: " + ", ".join(m[:40] for m in MIT_TEXT_MARKERS if m not in lic))
+    check("LICENSE states a file-level scope section naming both classes",
+          "Scope of this file" in lic and "CC BY 4.0" in lic and "SPDX-License-Identifier: MIT" in lic)
+    check("LICENSE.docs incorporates the CC BY 4.0 legal text by reference",
+          "Creative Commons Attribution 4.0" in docs and "creativecommons.org/licenses/by/4.0/legalcode" in docs)
+    check("the two license files are the only scope-neutral files",
+          sorted(t for t, c in cls.items() if c == "NEUTRAL") == ["LICENSE", "LICENSE.docs"])
+
+    bad = []
+    for d in sorted({os.path.dirname(t) for t in tracked if t.startswith("results/strata/") and t.endswith("manifest.json")}):
+        m = json.load(open(os.path.join(ROOT, d, "manifest.json"), encoding="utf-8"))
+        s = m.get("license", "")
+        if "CC BY 4.0" not in s or "MIT" not in s or "extract.awk" not in s:
+            bad.append(d)
+    check("every dataset manifest names the license of both its record and its extractor", not bad, ", ".join(bad))
+    print("       note .tsv and manifest.json carry no inline notice because neither format has a comment")
+    print("       syntax; their coverage is the rule above plus the manifest license field, and check [4]")
+    print("       pins each published TSV to the sha256 its manifest already published.")
+
+
+# --------------------------------------------------------------------------- 9. extract regression tests
 def check_extract_tests():
-    print("\n[8] extraction regression tests (synthetic fixtures only)")
+    print("\n[9] extraction regression tests (synthetic fixtures only)")
     script = os.path.join(ROOT, "tests", "extract", "run_tests.sh")
     if not os.path.isfile(script):
         check("tests/extract/run_tests.sh exists", False)
@@ -400,9 +490,9 @@ def check_extract_tests():
     check("synthetic extraction tests pass", r.returncode == 0, tail[-1] if tail else "no summary line produced")
 
 
-# --------------------------------------------------------------------------- 9. optional private re-extraction
+# --------------------------------------------------------------------------- 10. optional private re-extraction
 def do_reextract(archive_dir):
-    print(f"\n[9] re-extraction against the private archive at {archive_dir}")
+    print(f"\n[10] re-extraction against the private archive at {archive_dir}")
     log = None
     for base, _, files in os.walk(archive_dir):
         for f in files:
@@ -459,6 +549,7 @@ def main():
         check_claims(data)
     check_links()
     check_publication_safety()
+    check_licensing()
     check_extract_tests()
     if args.reextract:
         do_reextract(args.reextract)

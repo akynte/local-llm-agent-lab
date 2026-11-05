@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2026 akynte (see the copyright line in LICENSE)
+#
 # Extraction program for results/strata/2026-11-02-config-sweep/engine-metrics.tsv
 #
 # Usage (lo, hi and R are required; the program refuses to run without them):
@@ -14,12 +17,12 @@
 # Optional: -v allow_empty=1 permits a zero-record window (off by default).
 #
 # R is passed in rather than written into this file, so the published program contains no absolute
-# personal path. R is replaced by four literal rules, longest first; the effect on a payload is that
-# paths under the install root become install-relative — "<root>/Strata-data/models/x.gguf" becomes
-# "models/x.gguf" — so this dataset contains no <STRATA_INSTALL_ROOT> placeholder. The generic
-# R + "/" rule is what would produce the placeholder form, for a path under the root that none of the
-# three specific rules matches. The diagnostics dataset, which also covers 0.1.54-era launches, uses
-# the placeholder form instead; see results/strata/2026-10-30-11-02-engine-diagnostics/extract.awk.
+# personal path. R is removed by four literal rules, longest first: three specific rules make paths under
+# the install root install-relative — "<root>/Strata-data/models/x.gguf" becomes "models/x.gguf" — and the
+# generic R + "/" rule produces <STRATA_INSTALL_ROOT> for a path under the root that none of the three
+# specific rules matched. Which form a dataset shows depends on the lines in that window, not on this
+# program; see this directory's README.md. The diagnostics program sanitizes differently; see
+# results/strata/2026-10-30-11-02-engine-diagnostics/extract.awk.
 #
 # Exit status: 0 records produced and no unsanitized path survived; 64 bad invocation (missing or
 # malformed -v variable, no file argument); 65 zero records selected; 66 an absolute personal path
@@ -27,11 +30,10 @@
 # never exits 0 having produced nothing.
 #
 # Sanitization is literal and boundary-aware, not regular-expression based: R (and H, if supplied) are
-# supplied by a caller, so they are matched with index() and only where they begin a path. Treating
-# them as regular expressions (which earlier versions of this program did) makes a root containing
-# . + ( ) [ ] * ? interpret itself: "." over-matches a different directory, "+" and "(" silently stop
-# the substitution working, and an empty or trailing-slash R leaves the real personal path in the
-# published payload.
+# supplied by a caller, so they are matched with index() and only where they begin a path and end at a
+# path boundary. A caller-supplied value is never handed to the regular-expression engine. The history of
+# why that rule exists, and the failure modes it prevents, are research findings and are recorded in this
+# directory's README.md and in docs/evidence-inventory.md conflict C17.
 #
 # The published-path guard is (a) a defensive assertion that neither supplied root still stands as a
 # complete path in a payload, and (b) a fixed list of home-directory roots (/home/, /Users/, /root/, /mnt/,
@@ -44,8 +46,7 @@
 # Selection whitelist — BROADER than the morning dataset's
 # (results/strata/2026-11-02-mtp-attempts/extract.awk): this window DOES select the request-level counters
 # "KV streaming:", "decode expert cache hit rate:" and "conversation cache:", which the morning dataset
-# deliberately excludes. It also allows MTP refusal lines ("strata generate: mtp: …"), though this window
-# contains none.
+# deliberately excludes. It also allows MTP refusal lines ("strata generate: mtp: …").
 # Selected: engine start lines, expert-cache sizing, automatic prompt chunk, MTP load lines,
 # MTP refusal/allocation-failure lines, prompt request records, KV-streaming / decode-hit-rate /
 # conversation-cache counters.

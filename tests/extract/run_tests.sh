@@ -1,4 +1,7 @@
 #!/bin/sh
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2026 akynte (see the copyright line in LICENSE)
+#
 # Regression tests for the three committed extract.awk programs.
 #
 # Everything here is synthetic. No real engine log, no real install root, no real home directory,

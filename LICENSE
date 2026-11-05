@@ -22,23 +22,88 @@ SOFTWARE.
 
 ---
 
-Scope of this file. This MIT license applies to the **software** of this
-repository: scripts, extractors such as `extract.awk`, parsers, validators,
-schemas, CI workflow definitions, and any program code added by later phases
-(including a future clean-room Go implementation).
+Scope of this file — the file-level licensing policy
+----------------------------------------------------
 
-It does **not** apply to the research record. Documentation prose and the
-published measurement datasets under `results/` (`.tsv` files, `manifest.json`
-files and the tables, findings and analyses in `docs/`) are licensed under
-Creative Commons Attribution 4.0 International; see `LICENSE.docs`. The reason
-for the split is stated in `README.md` and in gap G1 of
-`docs/evidence-inventory.md`: measurement records are meant to be reused with
-attribution to this project, while tooling is meant to be reused freely.
+Owner decision recorded 2026-11-05, closing conflict **C25** and gap **G15** of
+`docs/evidence-inventory.md`.
 
-Where a single file contains both code and substantial research prose, the
-Creative Commons terms in `LICENSE.docs` govern the prose and the MIT terms
-govern the code.
+The MIT permission notice above is reproduced **verbatim and unamended**. It is the
+operative license text: a license cannot be partially rewritten and still be called
+MIT. What this section defines is therefore not a modification of the grant but its
+**scope** — which files of this repository "the Software" refers to, and which files
+are offered under a different license instead. Where the grant text speaks of "this
+software and associated documentation files", the sentence is read against this
+section, which states file by file what is offered under MIT and what is not.
 
-The copyright holder name above is the public account that owns this
-repository. It may be replaced with the holder's legal name without changing
-the license terms.
+### 1. "The Software" — MIT
+
+Executable source files, **including the operational comments inside them**:
+
+- `scripts/validate.py`, `scripts/validate.sh`
+- `tests/extract/run_tests.sh`
+- `.github/workflows/validate.yml`
+- `results/strata/2026-10-30-11-02-engine-diagnostics/extract.awk`,
+  `results/strata/2026-11-02-config-sweep/extract.awk`,
+  `results/strata/2026-11-02-mtp-attempts/extract.awk`
+- `.gitignore`
+- any file added by a later phase whose extension is `.py`, `.sh`, `.awk`, `.go`,
+  `.yml`, `.yaml` or `.json` **and** whose path is under `scripts/`, `tests/`,
+  `schemas/` or `.github/` — this includes a future clean-room Go implementation of
+  the rate-limiter exercise
+
+An **operational comment** is one a reader needs in order to run, maintain or extend
+the program: usage, required variables, exit statuses, selection rules, sanitization
+rules, and portability notes. Comments of that kind are part of the code they
+document and travel with it under MIT.
+
+Each file in this class carries a machine-readable notice:
+
+    SPDX-License-Identifier: MIT
+    SPDX-FileCopyrightText: 2026 akynte
+
+### 2. The research record — CC BY 4.0
+
+Documentation, datasets and their metadata, and the analytical prose built from them:
+
+- every `.md` file in this repository (`README.md`, `CONTRIBUTING.md`, `SECURITY.md`,
+  `docs/`, `engines/`, `agents/`, `results/README.md` and each dataset `README.md`)
+- every `.tsv` file under `results/` (the published record extracts)
+- every `manifest.json` under `results/` (provenance metadata)
+- tables, findings, analyses, evidence classifications and conflict records derived
+  from those datasets
+
+See `LICENSE.docs`. A dataset's `manifest.json` carries a `license` field naming both
+classes for that directory, because `.tsv` and JSON have no comment syntax and cannot
+carry an inline notice.
+
+**Research commentary is not kept in the source files.** On 2026-11-05 the historical
+and analytical commentary that had accumulated in the `extract.awk` headers — what
+earlier versions of those programs did wrong, the failure modes that were reproduced,
+and the cross-references to conflict records — was moved into the `README.md` of the
+dataset each program produced, which is class 2 material. Nothing was deleted: the
+commentary moved to the license under which research commentary belongs, and the
+programs keep only the operational comments of class 1. The move is recorded in
+`docs/evidence-inventory.md` §6.2.
+
+### 3. Scope-neutral files
+
+`LICENSE` and `LICENSE.docs` are this repository's license statements. The MIT text in
+`LICENSE` is that license; the CC BY 4.0 text incorporated by reference in
+`LICENSE.docs` is that license. Neither file is "software" or "the research record" —
+they define the terms for the other two classes, and they are reproduced verbatim in
+any redistribution. The explanatory scope notes inside them are documentation and are
+offered under CC BY 4.0; the license texts they reproduce keep their own terms.
+
+### 4. Why the split exists, and how it is enforced
+
+The reason is stated in `README.md` and gap G1: measurement records are meant to be
+reused **with attribution to this project**, while tooling is meant to be reused
+freely.
+
+`sh scripts/validate.sh` check [8] enforces this section rather than asserting it: it
+classifies every tracked file by the rules above, fails if any tracked file falls
+outside all three classes, fails if a class-1 file lacks the SPDX notice, fails if a
+class-2 file carries an MIT notice, and fails if either license text has been altered
+from its standard form. A contribution that does not fit the rules is a licensing
+question to raise before writing code, not one to resolve inside a file.

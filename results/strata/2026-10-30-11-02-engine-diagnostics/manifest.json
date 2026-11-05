@@ -1,7 +1,7 @@
 {
   "dataset_id": "strata-20261030-1102-engine-diagnostics",
   "kind": "engine-log-derived-diagnostics-and-session-census",
-  "license": "CC BY 4.0 for this dataset and manifest (research record; see LICENSE.docs, legal text at https://creativecommons.org/licenses/by/4.0/legalcode); extract.awk in this directory is MIT (see LICENSE)",
+  "license": "CC BY 4.0 for engine-diagnostics.tsv, this manifest.json and this directory's README.md (research record; see LICENSE.docs, legal text at https://creativecommons.org/licenses/by/4.0/legalcode); MIT for extract.awk in this directory (see LICENSE). File-level policy: LICENSE, section 'Scope of this file'. Enforced by scripts/validate.py check [8].",
   "schema_status": "provisional (a formal result schema is a Phase 2 deliverable; see docs/architecture.md)",
   "captured_at_utc": "2026-11-03T11:05:00Z",
   "timezone": "UTC+04:00; local timestamps in the TSV are engine-written",

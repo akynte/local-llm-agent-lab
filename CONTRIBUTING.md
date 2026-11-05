@@ -102,23 +102,37 @@ What is allowed and what is not:
 
 ## Licensing
 
-This repository is dual-licensed, and the split is deliberate:
+This repository is dual-licensed, and the split is defined **file by file** in `LICENSE`
+(§"Scope of this file"):
 
-- **Software** — scripts, the `extract.awk` extractors committed beside the datasets, parsers, validators,
-  schemas, CI definitions, and any program code added by later phases — **MIT**, in `LICENSE`.
-- **Research record** — documentation, `manifest.json` metadata, `.tsv` datasets, and the tables and analyses
-  built from them — **CC BY 4.0**, in `LICENSE.docs`, whose legal text is incorporated by reference.
+- **MIT** — executable source files and the operational comments inside them: `scripts/`, `tests/`,
+  `results/strata/*/extract.awk`, `.github/workflows/`, `.gitignore`, plus any later-phase file matching the
+  extension-and-path rule there. Each carries `SPDX-License-Identifier: MIT`.
+- **CC BY 4.0** — documentation, every `.tsv` dataset, every `manifest.json`, each dataset `README.md`, and
+  the tables and analyses built from them. Legal text incorporated by reference in `LICENSE.docs`.
+- **Scope-neutral** — `LICENSE` and `LICENSE.docs` themselves.
+
+An **operational comment** (usage, required variables, exit statuses, selection and sanitization rules,
+portability notes) is part of the code it documents and travels with it under MIT. **Research commentary**
+— what the tooling got wrong, why a rule exists, which conflict record it belongs to — is CC BY material and
+belongs in the documentation beside the file, not inside it. That distinction is what closed conflict C25.
 
 When you contribute:
 
 1. Contribute only material you have the right to contribute under these terms. If a measurement came from
    someone else's machine, you are licensing your own record of it, not their data.
-2. Code you contribute is offered under the MIT terms; documentation and measurements under CC BY 4.0.
-3. Never contribute raw engine logs, agent transcripts, model weights, or code you did not write or are not
+2. Code you contribute is offered under the MIT terms and **must carry the two SPDX lines**; documentation
+   and measurements are offered under CC BY 4.0. `sh scripts/validate.sh` check [8] classifies every tracked
+   file and fails the run if a file is unclassified, if an MIT-class file has no SPDX notice, or if a CC BY
+   file carries an MIT one.
+3. If a file you want to add matches none of the rules, that is a licensing decision to raise in an issue
+   before writing it — the validator failing on an unclassified file is the intended signal, not something to
+   work around by loosening the rule.
+4. Never contribute raw engine logs, agent transcripts, model weights, or code you did not write or are not
    licensed to share. `SECURITY.md` and `results/README.md` explain what is excluded and why.
-4. Do not relicense existing files and do not add a third license file. If a future component genuinely needs
-   different terms, open an issue before writing it.
-5. Keep the evidence-class label (`docs/methodology.md` §1) attached to any number you reuse. Stripping the
+5. Do not relicense existing files and do not add a third license file. Do not edit the MIT permission notice
+   or the CC BY 4.0 legal text: check [8] fails if either standard text has been altered.
+6. Keep the evidence-class label (`docs/methodology.md` §1) attached to any number you reuse. Stripping the
    label is the most common way this data gets misused.
 
 ## Pull requests

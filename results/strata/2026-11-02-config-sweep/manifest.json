@@ -1,7 +1,7 @@
 {
   "dataset_id": "strata-20261102-config-sweep",
   "kind": "engine-log-derived-metrics",
-  "license": "CC BY 4.0 for this dataset and manifest (research record; see LICENSE.docs, legal text at https://creativecommons.org/licenses/by/4.0/legalcode); extract.awk in this directory is MIT (see LICENSE)",
+  "license": "CC BY 4.0 for engine-metrics.tsv, this manifest.json and this directory's README.md (research record; see LICENSE.docs, legal text at https://creativecommons.org/licenses/by/4.0/legalcode); MIT for extract.awk in this directory (see LICENSE). File-level policy: LICENSE, section 'Scope of this file'. Enforced by scripts/validate.py check [8].",
   "schema_status": "provisional (a formal result schema is a Phase 2 deliverable; see docs/architecture.md)",
   "captured_at_utc": "2026-11-03T09:25:53Z",
   "measurement_window_local": "2026-11-02 18:42 to 2026-11-02 20:54 (UTC+04:00)",

@@ -246,7 +246,7 @@ not agree. They are resolved here rather than smoothed over.
 | C22 | `docs/findings.md` §1.3 quotes a warm reported-prefill band of **39.6–555.7 tok/s** while its table publishes only four of the eight warm records, and the 39.6 record (a 43 063-token prompt reusing 43 034 tokens) is not among them. A reader cannot reproduce the quoted band from the published table. | All eight warm records from the single 20:54:54 launch are now tabulated. The band reproduces from the table. |
 | C23 | Four internal cross-references point to `docs/evidence-inventory.md` **§5.1** and one to `docs/methodology.md` **§3.1**. Neither section exists: `docs/evidence-inventory.md` §5 is a numbered list whose relevant item is item 1, and `docs/methodology.md` §3 is a numbered list whose relevant rule is rule 1. | Re-pointed to §5 item 1 and §3 rule 1. `scripts/validate.py` now reports unresolved `file §N` cross-references as a warning. |
 | C24 | `docs/hardware.md` lists a running desktop compositor among the processes resident on the GPU at measurement time, in the same section that records that no compositor process was found, and lists "`avx512*` absent … bf16-adjacent paths" as the relevant vector ISA. | The co-residency row is an inference from the engine's own VRAM-fullness warnings, not a captured process list; it is now labelled as such. The ISA row now states only what `/proc/cpuinfo` flags show. |
-| C25 | `LICENSE` grants rights over "this software and associated documentation files (the 'Software')" in its MIT grant text, then carves documentation prose out to CC BY 4.0 in its own scope note. The grant clause is not amended, so the operative MIT text and the scope note disagree about documentation. `extract.awk` files are called MIT by all three manifests while each contains substantial research prose in comments, which `LICENSE`'s mixed-file rule assigns to CC BY. | **Left open for an owner decision.** No license text was rewritten here; the disagreement is recorded rather than resolved unilaterally. The safest reading a reader can apply today is `LICENSE`'s own mixed-file rule: code under MIT, research prose under CC BY 4.0. |
+| C25 | `LICENSE` grants rights over "this software and associated documentation files (the 'Software')" in its MIT grant text, then carves documentation prose out to CC BY 4.0 in its own scope note. The grant clause is not amended, so the operative MIT text and the scope note disagree about documentation. `extract.awk` files are called MIT by all three manifests while each contains substantial research prose in comments, which `LICENSE`'s mixed-file rule assigns to CC BY. | **Closed by owner decision on 2026-11-05**, recorded in §6.3 below. `LICENSE` §"Scope of this file" now defines "the Software" file by file: MIT over executable source **including its operational comments**, CC BY 4.0 over documentation, datasets, manifests and analytical prose, `LICENSE` / `LICENSE.docs` scope-neutral. Neither standard license text was amended — the MIT notice is reproduced verbatim, and the scope section states what it is offered over. The research prose was taken out of the extractor programs and put in the dataset `README.md` beside each program, so no MIT-class file carries research commentary any more. |
 | C26 | `LICENSE` and `CONTRIBUTING.md` list "CI workflow definitions" under MIT and `CONTRIBUTING.md` describes tooling that did not exist in the repository; `docs/methodology.md` §2.1 refers to "the validation script" and to "publication-safety patterns live in a file", and no such script or file existed. | The claims were counterfactual until 2026-11-05. `scripts/validate.sh`, `scripts/validate.py`, `tests/extract/run_tests.sh` and `.github/workflows/validate.yml` now exist and are the thing those sentences refer to. The publication-safety commands in `CONTRIBUTING.md` remain as a staged-diff check; §6 of this file records what neither mechanism can catch. |
 
 ## 5. Evidence that does not exist
@@ -276,9 +276,10 @@ Recorded explicitly so that no reader mistakes absence for a result.
    records are not comparable to the published 0.1.55 numbers, and because of C11 they may not remain
    retrievable from the same log file indefinitely.
 7. **No hidden or externally authored test set** exists for coding-agent evaluation.
-8. **Licenses now exist for this repository** (`LICENSE`, MIT, for software; `LICENSE.docs`, CC BY 4.0, for
-   the research record), decided by the owner on 2026-11-04. **No license exists for the Go project in S13**,
-   and it is not published here, so its code remains outside the repository's licensing entirely.
+8. **Licenses now exist for this repository** (`LICENSE`, MIT over the executable-source class; `LICENSE.docs`,
+   CC BY 4.0 over the research-record class), decided by the owner on 2026-11-04 and made **file-level** on
+   2026-11-05 (§6.3). **No license exists for the Go project in S13**, and it is not published here, so its
+   code remains outside the repository's licensing entirely.
 9. **No retained artifacts for the mutation-testing and RED-test claims** in E4. The claims are
    recorded in the agent's README and in commit messages; the runs themselves were not captured.
 
@@ -299,9 +300,9 @@ Recorded explicitly so that no reader mistakes absence for a result.
 | G11 | No per-request resource sampling exists for any published record | 2 | Every throughput number in this repository was captured without a simultaneous CPU-load, GPU-utilization, VRAM-occupancy or temperature sample. The Phase 2 harness must record them; until then no throughput figure can be attributed to a resource state |
 | G12 | Engine argument documentation is private | 2 | `engines/strata/configuration.md` quotes the engine's own help text, which lives only in the private log as the usage dump printed by the five unknown-argument rejections. No published dataset contains those strings, so a reader cannot check them. Publish the usage dump as a sanitized artifact (or drop the quotes) in Phase 2 |
 | G13 | No runnable publication-safety check existed | 1 | **Partially closed 2026-11-05.** `scripts/validate.py` check [7] scans every tracked text file for absolute personal paths, credential-shaped strings and this machine's hostname, and check [3] scans every published payload. The four `git diff --cached` commands in `CONTRIBUTING.md` remain as the pre-commit form. Neither form is a guarantee; §6.1 below states what they cannot catch |
-| G14 | The `IQ3_S` quantization appears in 8 of the 57 census launches, but no manifest, dataset or document in this repository records its file names, byte sizes or hashes | 2 | Publish the `IQ3_S` shard sizes and hashes in the diagnostics manifest's model block, or state explicitly that this census covers a quantization whose files are undocumented here. Recorded as found in C14 |
-| G15 | `extract.awk` files are called MIT by all three manifests while each contains substantial research prose in its comments | 1 | Unresolved, and deliberately not changed in this pass. `LICENSE`'s mixed-file rule governs: code under MIT, research prose under CC BY 4.0. Narrowing the comments to operational notes would remove the ambiguity; doing so would also remove provenance information a reader needs. Owner decision required (see C25) |
-| G16 | The hardened extraction programs have not been run against the **live** engine log, only against the archived copy | 2 | Re-run `python3 scripts/validate.py --reextract <archive>` after any future extraction window is added, and record the exit status. Until then the published reproduction claim covers the archive, which is what the manifests say |
+| G14 | The `IQ3_S` quantization appears in 8 of the 57 census launches, but no manifest, dataset or document in this repository records its file names, byte sizes or hashes | 2 | **Still open, and deliberately unfilled.** Nothing was invented to close it: the diagnostics manifest's model block records the `IQ3_S` file sizes and hashes as `null`, because no such value exists in any published artifact here. To close it someone must publish the real shard sizes and hashes (or an upstream reference to them) in that model block. Until then every whole-window census figure in this dataset covers a quantization whose files are undocumented here — which the manifest's `census_scope_warning` and C14 both state |
+| G15 | `extract.awk` files are called MIT by all three manifests while each contains substantial research prose in its comments | 1 | **Closed 2026-11-05** by the file-level licensing decision in §6.3. The programs now carry operational comments only (usage, required `-v` variables, exit statuses, selection whitelist, sanitization rule, mawk portability note); the research commentary moved to the `README.md` of the dataset each program produced. The provenance was not lost: the failure-mode narrative was already published in `docs/reproducibility.md` §1 and as conflict C17 above, and the synthetic reproductions are in `tests/extract/run_tests.sh`. `scripts/validate.py` check [8] enforces the classification |
+| G16 | The hardened extraction programs have not been run against the **live** engine log, only against the archived copy | 2 | **Not a blocker for anything published here.** The archived snapshot (`2026-11-04T10:29:44Z`, 22 132 lines, 2 839 708 bytes, sha256 `c102ade0…a68b9`) is the source of record for all three published datasets, and each was re-derived from it byte-for-byte with the corrected programs on 2026-11-05. A live-log comparison is not required to close any documentation, licensing or reproducibility item in this repository, and none is pending on it. The gap is recorded only so that the reproduction claim is read as being about the archive: if a **future** window is extracted from a live log, re-run `sh scripts/validate.sh --reextract <archive-or-log>` and record the exit status |
 
 ---
 
@@ -334,4 +335,57 @@ published measurement was changed and no dataset was edited.
 | Confirmed the long-context claims are correctly qualified | 189 737 tokens at 254.3 tok/s is the longest **completed cold** prefill in the morning dataset. The longest completed prompt record of any kind there is 197 272 tokens, which reused 194 255 tokens at 248.2 tok/s and is not a cold prefill; the published wording is correct, and the distinction is now stated in `README.md` |
 | Documentation corrections | C13–C24 above. `docs/findings.md` §1.3 now publishes all eight warm records; `results/README.md` no longer over-claims the 15 693-line re-derivation; broken §-references re-pointed; `docs/hardware.md` co-residency and ISA rows corrected; `CONTRIBUTING.md` now states that its command 1 is a candidate list rather than a gate, and that `scripts/validate.py` check [7] is the gate |
 | Added CPU-only validation entry points | `scripts/validate.sh`, `scripts/validate.py`, `tests/extract/run_tests.sh`, `.github/workflows/validate.yml`. No benchmark harness, no agent-evaluation framework, no engine adapter |
-| Deliberately **not** changed | Every published TSV record, every published number, every measurement window, the license files (C25 left open), the Go case study's evidence class, and the historical datasets' manifests' measurement fields | — |
+| Deliberately **not** changed | Every published TSV record, every published number, every measurement window, the license files as they stood at that point (C25 was left open by that pass and closed later the same day, see §6.3), the Go case study's evidence class, and the historical datasets' manifests' measurement fields | — |
+
+---
+
+## 6.3 File-level licensing decision of 2026-11-05 (closes C25 and G15)
+
+The owner directed this resolution rather than leaving it to a reader's interpretation: define the split
+**file by file**, keep both standard license texts intact, and move research commentary out of source files
+only where that is necessary — without losing provenance.
+
+| Class | What it covers | How a file declares it |
+| --- | --- | --- |
+| **MIT** | executable source and **the operational comments inside it**: `scripts/validate.py`, `scripts/validate.sh`, `tests/extract/run_tests.sh`, `.github/workflows/validate.yml`, the three `results/strata/*/extract.awk`, `.gitignore`, plus the extension-and-path rule in `LICENSE` for later-phase files (including a future clean-room Go implementation) | `SPDX-License-Identifier: MIT` and `SPDX-FileCopyrightText: 2026 akynte`, present in all 8 such files |
+| **CC BY 4.0** | every `.md` in the repository, every `.tsv` under `results/`, every `manifest.json` under `results/`, and the tables, findings and analyses derived from them | by rule at repository level; `.tsv` and JSON have no comment syntax, so each dataset's `manifest.json` carries a `license` field naming both classes for that directory |
+| **Scope-neutral** | `LICENSE` and `LICENSE.docs` | they are the license statements that define the terms for the other two classes |
+
+**How the MIT grant text was handled.** The permission notice in `LICENSE` is reproduced **verbatim and
+unamended**; check [8] fails if either standard license text is altered. The conflict was never in the notice
+but in what it is offered *over*, so the resolution is a scope definition: `LICENSE` states that "the
+Software" in this repository means the MIT-class files above, and that an **operational comment** — usage,
+required variables, exit statuses, selection rules, sanitization rules, portability notes — is part of the
+code it documents and travels with it under MIT. Research commentary is CC BY material even when it happens
+to sit inside a source file, which is why it was moved rather than dual-licensed in place.
+
+**What moved, and where the provenance went.**
+
+| Removed from `extract.awk` (MIT) | Where it now lives (CC BY 4.0) |
+| --- | --- |
+| The enumerated failure modes of the superseded `gsub(R, …)` / `gsub(H, …)` form, and the sentence saying earlier versions of the program did this | Already published in `docs/reproducibility.md` §1 and as conflict **C17** above; each failure mode is reproduced by a synthetic case in `tests/extract/run_tests.sh` |
+| "this dataset contains no `<STRATA_INSTALL_ROOT>` placeholder" and "that is a property of the lines this window contains, not of the program" | The two request datasets' `README.md`, under *Extraction program, and a licensing note* |
+| "this window contains no MTP refusal line", and the equivalent claim about the other window | The same two dataset `README.md` files |
+| The diagnostics program's placeholder behaviour, unstated before | `results/strata/2026-10-30-11-02-engine-diagnostics/README.md`: 263 of 1 941 records contain `<STRATA_INSTALL_ROOT>` (516 occurrences), and **no** record contains `<HOME>` because window 1–13420 has no home-directory path, although the program requires `-v H=` |
+
+No program behaviour changed, no dataset byte changed, and nothing was deleted: the commentary changed
+license class by changing file.
+
+**Enforcement rather than assertion.** `scripts/validate.py` check [8] classifies every tracked file by these
+rules, fails if any tracked file falls into none of the three classes, fails if an MIT-class file lacks its
+SPDX notice, fails if a CC BY-class file carries an MIT notice, fails if either standard license text has
+been altered, and fails if a dataset manifest stops naming both classes for its directory. At the time of
+writing it reports `CC-BY=26  MIT=8  NEUTRAL=2` over 36 tracked files.
+
+**What this decision does not settle.**
+
+- GitHub's automatic detector still reports the repository as `NOASSERTION / Other`. That was reviewed on
+  2026-11-04 and left as it is: the terms are stated in the files, not in a badge, and a dual-licensed
+  repository cannot be described by one badge.
+- The copyright holder line still names the public account. Replacing it with a legal name is an owner action
+  that does not change the terms.
+- The Go rate-limiter exercise remains unlicensed and unpublished here (gap G2); the file-level policy says
+  nothing about it.
+- These classification rules are this repository's own policy. They make the split unambiguous for a reader
+  and machine-checkable for a contributor; they are not a legal opinion, and a reader who needs one for a
+  reuse that matters should get one.
