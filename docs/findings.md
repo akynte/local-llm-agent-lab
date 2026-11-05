@@ -132,7 +132,18 @@ is how much of the prompt was fresh:
 | 13 686 | 13 061 (95.4%) | 625 | 255.7 tok/s |
 | 16 668 | 13 910 (83.5%) | 2 758 | 555.7 tok/s |
 | 37 732 | 35 701 (94.6%) | 2 031 | 428.7 tok/s |
+| 38 668 | 38 502 (99.6%) | 166 | 116.0 tok/s |
 | 38 789 | 38 734 (99.9%) | 55 | 68.7 tok/s |
+| 39 902 | 39 875 (99.9%) | 27 | 41.1 tok/s |
+| 40 021 | 39 989 (99.9%) | 32 | 45.0 tok/s |
+| 43 063 | 43 034 (99.9%) | 29 | 39.6 tok/s |
+
+All eight records are tabulated here, because the quoted **39.6–555.7 tok/s** band is the band of all
+eight; an earlier version of this table published four of them and a reader could not reproduce the band
+from what was printed (conflict **C13** in `docs/evidence-inventory.md`, corrected 2026-11-05). Four of
+the eight also generated at least 1 000 tokens, which is why they enter the `generated >= 1000` decode
+filter discussed in `docs/reproducibility.md` §1: log lines 13380, 13400, 13412 and 13418, at 26.2, 27.5,
+26.9 and 27.5 tok/s decode.
 
 Those figures are the cost of the small fresh remainder amortised over the whole prompt, which is why a
 99.9%-reused request can report 68.7 tok/s while an 83.5%-reused one reports 555.7. They are **not**
@@ -364,7 +375,7 @@ was under concurrent load):
 Not re-run, therefore **A**: `govulncheck`, the benchmark timings, the mutation-testing evidence, the
 original RED failures behind the six reported defects, and the clock-ordering proof. The benchmark
 suite was deliberately not re-run because this audit session is itself served by the same GPU under
-study (see `docs/evidence-inventory.md` §5.1); re-running it now would produce numbers that are
+study (see `docs/evidence-inventory.md` §5 item 1); re-running it now would produce numbers that are
 perturbed by the audit.
 
 **Methodological warning that must stay in the record:** the 100% coverage figure is statement

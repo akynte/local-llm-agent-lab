@@ -85,7 +85,8 @@
       "window_inclusive": [12627, 13420],
       "rows_produced": 134,
       "result": "re-extracted from the archived copy on 2026-11-04 with the committed extract.awk and the same window variables; the diff against the committed engine-metrics.tsv printed nothing, i.e. byte-for-byte identity",
-      "tsv_sha256": "e1e910513262efe441a71e8cac6af323595fb8bd8471789a246ef55a4b1e8f1d"
+      "tsv_sha256": "e1e910513262efe441a71e8cac6af323595fb8bd8471789a246ef55a4b1e8f1d",
+      "reverified_again_2026_11_05": "re-derived from the same archived copy on 2026-11-05 with the corrected extract.awk (literal boundary-aware path substitution, validated -v arguments, nonzero exit on a zero-record window): 134 records, empty diff, sha256 unchanged. docs/evidence-inventory.md §6.2"
     },
     "note": "line numbers in this manifest are anchors into the archived copy, not identifiers. The private directory holding the archive, and the private ARCHIVE.md beside it, are not published and never enter this repository"
   },
@@ -106,13 +107,15 @@
     "program_file": "extract.awk",
     "program": "see extract.awk in this directory. Its whitelist is: engine_start lines; 'strata generate: expert cache N slots'; 'strata serve: prompt chunk auto'; 'strata mtp: draft layer loaded'; 'strata generate: mtp:' (MTP refusal / allocation failure); 'strata serve: prompt N tokens = …'; and the 'KV streaming', 'decode expert cache hit rate' and 'conversation cache' request counters. Usage text, ggml_cuda_init lines, load_hparams warnings and route-tail-skip counters are not selected",
     "sanitization_applied": [
-      "absolute paths under the local Strata install root were replaced by <STRATA_INSTALL_ROOT>/ or by install-relative paths",
+      "absolute paths under the local Strata install root were replaced by <STRATA_INSTALL_ROOT>/ or by install-relative paths, matched literally and only where the root begins a path, so a component that merely shares the prefix is left alone",
       "the engine binary path was replaced by the literal \"strata\"",
       "pack, model and expert-profile paths were reduced to paths relative to the Strata data root",
+      "the line prefixes 'strata generate: ' and 'strata serve: ' and the '[strata] <date> <time> engine started: ' prefix are stripped from every published payload",
       "no request payload, prompt text, completion text or tool output was selected by the extraction",
-      "the published TSV was re-checked by scanning for absolute paths under the local home directory and for the local username; zero matches"
+      "the published TSV was re-checked by scanning for absolute paths under the local home directory and for the local username; zero matches. The username scan was a manual action by the owner; no committed program performs a username check (docs/evidence-inventory.md §6.1)",
+      "the program refuses to publish if any absolute personal path survives these substitutions (exit 66), and refuses to exit successfully having selected nothing (exit 65)"
     ],
-    "verbatim_note": "selected payload lines are byte-for-byte copies of the log lines after the path substitutions above; no numeric value was edited"
+    "verbatim_note": "selected payload lines are the log lines after the path substitutions and the prefix stripping listed above; no numeric value was edited. Until 2026-11-05 this note described the payloads as byte-for-byte copies after path substitution only, which omitted the prefix stripping (conflict C15)"
   },
   "limitations": [
     "prompt identity across sessions is inferred from identical prompt token counts (12719 tokens in six sessions — five without MTP and one with MTP; 53 tokens as a warm-up probe in every session); the prompt text itself is private and unpublished",

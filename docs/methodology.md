@@ -55,15 +55,21 @@ work will meet the same walls. All of these happened during the 2026-11-02 → 2
 | Multi-line awk condition | `awk: line 2: syntax error at or near ,` and later `awk: …: line 3: missing ) near end of line` | **the default `awk` on this host is mawk**, which rejects an `if` / `else if` condition continued across lines. All three committed `extract.awk` programs keep every condition on one line; an earlier published version of the extraction program failed here and was replaced |
 | grep pattern starting with `->` | `grep: invalid option -- '>'` | patterns that begin with a dash are passed after `--` or rewritten |
 | JSON manifest edit | `Expecting ',' delimiter: line 80 column 5 (char 4450)` and later `Illegal trailing comma before end of object: line 68 column 543` | every manifest edit is followed by a `json.load` validation pass. The second message came from a note rewritten during the 2026-11-04 correction pass, where the sentence it replaced had ended with a comma that the new text no longer justified; the validator is what caught it |
-| Shell quoting of a scan pattern | `/bin/bash: -c: line 1: syntax error near unexpected token '[_-]?'` | publication-safety patterns live in a file, not in a shell one-liner |
-| `wc` on an empty argument | `wc: invalid zero-length file name` and the follow-on `FileNotFoundError: [Errno 2] No such file or directory: ''` | a pipeline built filenames from a variable that was empty; the validation script now checks for empty paths |
+| Shell quoting of a scan pattern | `/bin/bash: -c: line 1: syntax error near unexpected token '[_-]?'` | publication-safety patterns live in a file, not in a shell one-liner. Until 2026-11-05 that file did not exist and the sentence described an intention; the patterns are now in `scripts/validate.py` check [7], and the `CONTRIBUTING.md` one-liners remain as the staged-diff form |
+| `wc` on an empty argument | `wc: invalid zero-length file name` and the follow-on `FileNotFoundError: [Errno 2] No such file or directory: ''` | a pipeline built filenames from a variable that was empty. `scripts/validate.py` builds no shell pipeline and resolves each dataset path before hashing it |
 | Edit-tool mismatches | `Could not find edits[0] … must match exactly including all whitespace and newlines` | documentation edits are re-read from the file before being retried, never guessed at |
-| Re-extraction run **without the window variables** | three empty TSVs, reported as "config-sweep DIFFERS / mtp-attempts DIFFERS / diagnostics DIFFERS" | `extract.awk` needs `-v lo=… -v hi=…`; run without them it selects nothing and exits cleanly. The false alarm was caught by checking the output line count (0) before believing the diff. Verification scripts here now assert a non-empty output **and** the expected record count before comparing |
-| Re-extraction run with a **wrong `-v R=` install root** (2026-11-04) | all three datasets reported "DIFFERS" while their record counts matched exactly (134 / 233 / 1941), and the payload diff consisted only of placeholder form | the sanitiser substitutes the install root first and falls back to the home-directory substitution when `-v R=` is wrong, so re-extracted payloads came back as `<HOME>/…` where the committed TSVs carry `<STRATA_INSTALL_ROOT>/…` or the stripped form. A diff that changes only placeholders is a tooling fault, not evidence that the log changed. A verification now compares record counts **and** the placeholder form before any statement about the log is made |
-| awk census command written as `print …, NR > 0` | a 29-byte file named `0` appeared inside `results/strata/2026-10-30-11-02-engine-diagnostics/` during a 2026-11-04 review pass | mawk parses `print … > expr` as a **redirect to a file named by that expression**, not as a comparison, so a guard written after `print` silently creates a file in the current directory. Every census command published here avoids `>` inside a `print`, and the validation step now checks that each dataset directory contains only `README.md`, `manifest.json`, `extract.awk` and `.tsv` files before anything is committed |
+| Re-extraction run **without the window variables** | three empty TSVs, reported as "config-sweep DIFFERS / mtp-attempts DIFFERS / diagnostics DIFFERS" | `extract.awk` needs `-v lo=… -v hi=…`; run without them the old programs selected nothing and exited cleanly. The false alarm was caught by checking the output line count (0) before believing the diff. Since 2026-11-05 all three programs reject a missing `lo`/`hi` with status 64 and report a zero-record window with status 65, so this failure mode cannot recur silently. The lesson about checking the line count before believing a diff still stands |
+| Re-extraction run with a **wrong `-v R=` install root** (2026-11-04) | all three datasets reported "DIFFERS" while their record counts matched exactly (134 / 233 / 1941), and the payload diff consisted only of placeholder form | The old sanitiser substituted the install root with `gsub(R …)`, treating a caller-supplied path as a **regular expression**. A wrong root therefore produced placeholder-shaped payloads instead of failing. (The explanation first recorded here — that the programs "fall back to the home-directory substitution" — was itself wrong: the two request programs never read `-v H=` at all. Corrected 2026-11-05, conflict C17.) A diff that changes only placeholders is a tooling fault, not evidence that the log changed. `scripts/validate.py` now compares record counts, the manifest-declared sha256 and the window before any statement about the log is made |
+| Sanitiser treating a supplied path as a **regular expression** (found 2026-11-05) | synthetic reproduction: a root containing `.` over-matched a different directory; a root containing `+` or `(` produced **no** substitution at all and left the personal path in the payload; an empty `-v R=` inserted `<STRATA_INSTALL_ROOT>` between every character of every payload; a trailing slash on `-v R=` left a full personal path in a re-extracted evening `engine_start` record | The three programs now substitute with `index()` and only at a path boundary, reject an empty or relative `R`/`H`, normalise a trailing slash, and exit 66 if any absolute personal path survives sanitization. `tests/extract/run_tests.sh` holds the synthetic cases. No published record changed: the corrected programs reproduce all three committed TSVs byte for byte |
+| awk census command written as `print …, NR > 0` | a 29-byte file named `0` appeared inside `results/strata/2026-10-30-11-02-engine-diagnostics/` during a 2026-11-04 review pass | mawk parses `print … > expr` as a **redirect to a file named by that expression**, not as a comparison, so a guard written after `print` silently creates a file in the current directory. Every census command published here avoids `>` inside a `print`, and `scripts/validate.py` check [1] now fails a run if a dataset directory contains anything other than `README.md`, `manifest.json`, `extract.awk` and `.tsv` files |
 
 None of these changed a published number. Several changed a published **program**, and the corrected
 program is the one committed next to the data.
+
+The 2026-11-05 pass added three failure modes to this table that had **not** been observed as incidents —
+they were found by reading the programs and then reproducing each one on synthetic fixtures. They are
+listed here rather than in a changelog because the point of this section is that a tool which fails quietly
+is a defect you will eventually believe.
 
 ## 3. Measurement rules
 
@@ -136,14 +142,22 @@ program is the one committed next to the data.
 
 ## 6. Publication safety
 
-Before any commit, run the scan in `CONTRIBUTING.md`. Never publish: model weights, raw engine or
-agent logs, conversation transcripts, session metadata that identifies a person, absolute personal
-paths, hostnames, UUIDs, credentials, or local virtual environments.
+Before any commit, run the scan in `CONTRIBUTING.md` (the staged-diff form) and `sh scripts/validate.sh`
+(which scans every tracked text file). Never publish: model weights, raw engine or agent logs, conversation
+transcripts, session metadata that identifies a person, absolute personal paths, hostnames, UUIDs,
+credentials, or local virtual environments.
 
-Engine logs are the most dangerous artifact in this project: they interleave request metrics with
-prompt and completion content. The published extracts are produced by a selection that only matches
-metric lines, then re-checked for personal paths. The extraction program is published so that the
-selection is auditable rather than asserted.
+Engine logs are the most dangerous artifact in this project: they interleave request metrics with prompt
+and completion content. The published extracts are produced by a selection that only matches metric lines,
+then re-checked for personal paths. The extraction program is published so that the selection is auditable
+rather than asserted. Since 2026-11-05 the extraction programs also refuse to publish: a payload in which
+an absolute personal path survived sanitization makes `extract.awk` exit 66 rather than emit it.
+
+Neither mechanism is a guarantee. `docs/evidence-inventory.md` §6.1 lists seven things they do not catch,
+including a username that appears outside an absolute path, a home directory outside the listed roots, a
+secret already committed before the check existed, and commit messages or author metadata. A publication
+claim in a manifest ("the published TSV was re-checked … for the local username") describes an action the
+owner performed by hand; no committed program performs a username check.
 
 ## 7. What this methodology explicitly does not claim
 

@@ -8,6 +8,30 @@
   "purpose": "the engine's own start-up diagnostics and configuration choices, published so that the engine-internal statements quoted in docs/findings.md, engines/strata/tuning.md, engines/strata/troubleshooting.md and docs/hardware.md are traceable to published data instead of to a private log",
   "measurement_window_local": "2026-10-30 19:22 to 2026-11-02 20:54",
   "line_window": [1, 13420],
+  "model": {
+    "note": "this census covers a line window that spans TWO quantizations. Both appear in the published engine_start payloads as install-relative model paths, so a reader can verify the split from the TSV alone",
+    "quantizations_observed": {
+      "IQ3_XXS": {
+        "launches": 49,
+        "shards": ["Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf", "Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf"],
+        "sizes_bytes": [47039860096, 28800138432],
+        "sha256": ["219ea929900dfa9ef091f3aa473fdba6874b65fcb36526d7d851ac9e95856d15", "316b46f3a2dbd68c900f43136ab9449f9dcc3725dfd8c794847c204bc161e113"],
+        "hashes_source": "identical to the values published in the 2026-11-02 manifests, where they are recorded as the engine's own local markers equal to the upstream Hugging Face LFS oids"
+      },
+      "IQ3_S": {
+        "launches": 8,
+        "shards": ["Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00001-of-00002.gguf", "Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00002-of-00002.gguf"],
+        "sizes_bytes": null,
+        "sha256": null,
+        "hashes_source": "not captured anywhere in this repository (gap G14). Only the file names, as they appear in the published engine_start payloads, are recorded here"
+      }
+    },
+    "by_engine_generation": {
+      "0.1.54": "12 IQ3_XXS launches plus 8 IQ3_S launches = 20",
+      "0.1.55": "37 IQ3_XXS launches, 0 IQ3_S"
+    },
+    "census_scope_warning": "every whole-window count in this manifest and in docs/findings.md §5 (57 launches, 42 with --vision, 25 requesting MTP, the 52 AVX-2 launches, the 36 huge-page fallbacks, the kv / spec / vram-reserve / kv-resident breakdowns) spans both quantizations and is not an IQ3_XXS-only count. All 8 IQ3_S launches are 0.1.54-era, all carry --vision and none carries --mtp. Conflict C14 in docs/evidence-inventory.md"
+  },
   "hardware": {
     "cpu": "Intel Core i7-13620H (10 physical cores, 16 logical, no AVX-512)",
     "ram_total_bytes": 65788956672,
@@ -92,7 +116,8 @@
       "window_inclusive": [1, 13420],
       "rows_produced": 1941,
       "result": "re-extracted from the archived copy on 2026-11-04 with the committed extract.awk and the same window variables; the diff against the committed engine-diagnostics.tsv printed nothing, i.e. byte-for-byte identity",
-      "tsv_sha256": "95e46eb10c8a44af3a93c661f459c74784439ea7161de1522d8d5fc151d4bff6"
+      "tsv_sha256": "95e46eb10c8a44af3a93c661f459c74784439ea7161de1522d8d5fc151d4bff6",
+      "reverified_again_2026_11_05": "re-derived from the same archived copy on 2026-11-05 with the corrected extract.awk (literal boundary-aware path substitution, validated -v arguments, nonzero exit on a zero-record window): 1 941 records, empty diff, sha256 unchanged. docs/evidence-inventory.md §6.2"
     },
     "note": "line numbers in this manifest are anchors into the archived copy, not identifiers. The private directory holding the archive, and the private ARCHIVE.md beside it, are not published and never enter this repository"
   },
@@ -101,15 +126,16 @@
     "program_note": "extract.awk takes the install root and the home directory as -v R=… and -v H=… at run time, so the published program contains no absolute personal path. Run: printf 'kind\\tlog_line\\tengine_started_local\\tpayload\\n' > engine-diagnostics.tsv; awk -v lo=1 -v hi=13420 -v R=\"$INSTALL_ROOT\" -v H=\"$HOME_DIR\" -f extract.awk \"$ENGINE_LOG\" >> engine-diagnostics.tsv",
     "column_semantics": "engine_started_local is the timestamp of the engine launch a record belongs to; records appearing before the first captured 'engine started' line carry the literal value 'no-engine-start-seen' rather than a guessed timestamp",
     "sanitization_applied": [
-      "absolute paths under the local Strata install root replaced by <STRATA_INSTALL_ROOT>/",
-      "any remaining occurrence of the local home path replaced by <HOME> (zero such occurrences remained in this run)",
+      "absolute paths under the local Strata install root replaced by <STRATA_INSTALL_ROOT>/, matched literally and only where the root begins a path and ends at a path boundary, so a different component that merely shares the prefix (…/strata-v2/…) is left alone",
+      "any remaining occurrence of the local home path replaced by <HOME>, by the same literal boundary-aware rule (zero such occurrences remained in this run)",
       "the '[strata] <date> <time> engine started: ' prefix stripped, with the timestamp kept as its own column",
-      "no prompt text, completion text, tool output or conversation content is selected by the whitelist"
+      "no prompt text, completion text, tool output or conversation content is selected by the whitelist",
+      "the program refuses to publish if any absolute personal path survives these substitutions (exit 66), and refuses to exit successfully having selected nothing (exit 65)"
     ],
     "continuation_lines": "multi-line engine messages are published as their first line plus every following indented line, tagged kind=continuation; 108 such lines exist, three per launch for the 36 launches that logged the expert-cache parity note",
     "record_counts": { "engine_start": 57, "event": 1776, "continuation": 108, "total": 1941 },
     "tsv_bytes": 308718,
-    "reproduction_check": "re-run with extract.awk at 17 233, at 18 689, at 19 664 and at 20 648 log lines (last on 2026-11-04T00:48:21Z); output byte-for-byte identical to the committed TSV every time"
+    "reproduction_check": "re-run with extract.awk at 17 233, at 18 689, at 19 664 and at 20 648 log lines (last on 2026-11-04T00:48:21Z); output byte-for-byte identical to the committed TSV every time. No re-derivation of THIS dataset is recorded at 15 693 lines, contrary to what results/README.md claimed until 2026-11-05 (conflict C13). Re-derived again from the archived copy on 2026-11-05 with the corrected program: identical"
   },
   "limitations": [
     "this dataset contains no per-request throughput records; throughput lives in the two request datasets",
@@ -117,6 +143,7 @@
     "the whitelist is a choice, not a complete capture: per-request counters such as route-tail-skip totals, suffix-draft totals and per-request KV-streaming hit rates are deliberately excluded here",
     "engine diagnostics lines are the engine's own claims about itself; they are measurements of what the engine decided, not independent confirmations that the decision was correct",
     "'sessions_with_no_logged_mtp_outcome' is an absence of a published line, not proof that MTP did not load",
-    "counts are per launch; a launch is not a measurement"
+    "counts are per launch; a launch is not a measurement",
+    "the census includes 8 launches of an IQ3_S quantization whose file sizes and hashes are recorded nowhere in this repository (gap G14); the IQ3_S launches are counted in every whole-window figure above but are otherwise undocumented here"
   ]
 }

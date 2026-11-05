@@ -6,7 +6,7 @@ that matches what you are trying to do.
 | Goal | What you need | Section |
 | --- | --- | --- |
 | Re-derive the published result tables from published data | the TSV files in `results/` only | §1 |
-| Re-verify the coding-agent exercise | Go 1.27+ and the source | §2 |
+| Re-verify the coding-agent exercise | Go 1.27+ **and the source of the exercise, which is not published in this repository** | §2 |
 | Reproduce a measurement on your own machine | your own hardware, engine and model | §3, §4 |
 
 Reproducing a *table* never requires model weights. Reproducing a *measurement* does.
@@ -53,7 +53,7 @@ prompt — and why it further splits those five by argument vector, because only
 argument vector **and** the same prompt.
 
 A second trap sits in the `decode` line, and it contradicts the warm-exclusion rule stated in
-`docs/methodology.md` §3.1: the filter is `generated >= 1000`, **not** `reused == 0`, so **four of the ten
+`docs/methodology.md` §3 rule 1: the filter is `generated >= 1000`, **not** `reused == 0`, so **four of the ten
 decode rates come from warm reused-prompt records**, all four from the 20:54:54 launch (log lines 13380,
 13400, 13412 and 13418, with 13 910 / 38 734 / 39 989 / 43 034 prompt tokens reused). Dropping them gives
 `decode: n=6 min=26.0 max=29.2 mean=27.8`. The five no-MTP cold runs quoted in `docs/findings.md` §1.1 are
@@ -307,11 +307,18 @@ auditable rather than asserted:
 ENGINE_LOG=…            # your private engine log; never committed
 INSTALL_ROOT=…          # your Strata install root; never committed
 HOME_DIR=…              # only the diagnostics program needs this
+OUT=/tmp/re-engine-metrics.tsv
 
-printf 'kind\tlog_line\tengine_started_local\tpayload\n' > engine-metrics.tsv
-awk -v lo=12627 -v hi=13420 -v R="$INSTALL_ROOT" \
-    -f results/strata/2026-11-02-config-sweep/extract.awk "$ENGINE_LOG" >> engine-metrics.tsv
+printf 'kind\tlog_line\tengine_started_local\tpayload\n' > "$OUT"
+awk -v lo=12627 -v hi=13420 -v R="$INSTALL_ROOT" -v expect=134 \
+    -f results/strata/2026-11-02-config-sweep/extract.awk "$ENGINE_LOG" >> "$OUT"
+diff "$OUT" results/strata/2026-11-02-config-sweep/engine-metrics.tsv
 ```
+
+Write to a path **outside** the dataset directory. The published command used to write
+`engine-metrics.tsv` into the current directory, which truncates the committed dataset when it is run from
+inside `results/strata/2026-11-02-config-sweep/` — the one way to actually damage a published dataset with
+the documented tooling. Corrected 2026-11-05.
 
 The two request programs use different whitelists — the morning one omits the KV-streaming,
 decode-hit-rate and conversation-cache counters — stated in each program's header and in each manifest.
@@ -319,9 +326,12 @@ Personal paths are passed in as `-v R=` / `-v H=`, so no published program conta
 path.
 
 **awk flavour matters.** The default `awk` on this host is **mawk**, and mawk rejects an `if` / `else if`
-condition continued across lines (`missing ) near end of line`). All three committed programs keep every
-condition on one line for that reason; an earlier version of this page published a multi-line version that
-failed under mawk on 2026-11-03. That failure is recorded in `docs/methodology.md` §2.1.
+condition continued across lines (`missing ) near end of line`). All three committed programs now keep
+every condition on one line for that reason. Until 2026-11-05 that sentence was not true of the diagnostics
+program, which continued one `else if` condition across seven physical lines while the documentation
+asserted the opposite (conflict **C17**); the programs were rewritten in that pass, so the claim now
+describes what is committed. An earlier published version of the extraction program also failed under mawk
+on 2026-11-03, and that failure is recorded in `docs/methodology.md` §2.1.
 
 **Line numbers are anchors, not stable identifiers.** The log's size did not change monotonically during
 the audit (15 426 → 16 105 → 15 693 → 17 233 → 18 689 → 19 664 → 20 648 lines; conflict C11 in
@@ -342,17 +352,73 @@ sed -n '12627p;13419p;13420p;9470p' "$ENGINE_LOG"
 
 This was done on 2026-11-03 at 15 693, 17 233, 18 689 and 19 664 log lines, and again on 2026-11-04 at
 20 648 lines: all three published datasets re-extracted byte-for-byte identically to the committed TSV
-files at every one of those sizes.
+files at every one of those sizes. It was done a third time on 2026-11-05, from the **archived copy**
+(§6), with the corrected programs; all three diffs were empty again.
 
-**The sanitiser substitutes with dynamic regular expressions.** Each program rewrites paths with
-`gsub(R, …)` and `gsub(H, …)`, where `R` and `H` are the values handed in by `-v R=` and `-v H=`. Two
-consequences follow. The published programs contain no absolute personal path, which is the point. But the
-substitution is only as correct as the value supplied: pass a wrong `-v R=` and the program does not fail,
-it falls through to the `-v H=` rule and emits payloads shaped `<HOME>/…` where the committed TSVs carry
-`<STRATA_INSTALL_ROOT>/…` or the fully stripped form. That happened on 2026-11-04 and produced a false
-"DIFFERS" for all three datasets while their record counts matched exactly (134 / 233 / 1941); the count
-match is what identified it as a tooling fault rather than log drift. Compare record counts **and**
-placeholder shape before concluding anything about the log.
+**How the sanitiser works, and what it now refuses to do.** Each program is given the install root as
+`-v R=` and, for the diagnostics program, the home directory as `-v H=`, so no published program contains
+an absolute personal path. Until 2026-11-05 both values were substituted with `gsub(R, …)` and `gsub(H, …)`,
+which hands a caller-supplied path to the regular-expression engine. That is what made the recorded
+"wrong `-v R=`" incident on 2026-11-04 behave the way it did, and it has worse consequences than a wrong
+placeholder:
+
+- a root containing `.` matches any character there, so `/opt/strata_root/…` is rewritten as though it
+  were under `/opt/strataXroot/…`;
+- a root containing `+`, `(`, `[` or `*` is a quantifier, a group or a bracket expression, and the
+  substitution silently does nothing — the personal path survives into the published payload;
+- an **empty** `R` or `H` makes the pattern match between every character, corrupting every payload;
+- a **trailing slash** on `-v R=` breaks the `R "/Strata-data/"` and `R "/"` rules in the two request
+  programs, and a full personal path survived into a re-extracted evening `engine_start` record;
+- the two request programs never read `H` at all, so a wrong `R` did not "fall back" to anything.
+
+All three programs now substitute with `index()` and replace a supplied root only where it begins a path
+and ends at a path boundary, so a similar-but-different component (`/opt/strata-v2/…`) is left alone
+instead of being rewritten into a path that never existed. They also validate their arguments in `BEGIN`
+and report a status:
+
+| Status | Meaning |
+| --- | --- |
+| 0 | records produced, every required variable valid, no personal path survived |
+| 64 | bad invocation: a required `-v` variable is missing, empty, non-numeric or not absolute; `hi < lo`; or no log file argument |
+| 65 | the window selected **zero** records, or `-v expect=N` did not match the record count |
+| 66 | at least one published payload still contained an absolute personal path after sanitization |
+
+Optional variables: `-v expect=N` asserts the exact record count the window must produce (134, 233 and
+1 941 for the three published windows), and `-v allow_empty=1` permits a zero-record window. A program
+never exits 0 having produced nothing, and never writes a partial dataset silently.
+
+A zero-row output is therefore now an error rather than a silent success — but it still has two possible
+causes, a wrong window or a window that genuinely contains no whitelisted line, and the program states
+both rather than guessing which one a reader meant. The earlier wording here ("a zero-row output means the
+window variables were omitted") inferred a single cause from one observation and has been corrected
+(conflict **C18**).
+
+---
+
+### Validating the published record without a GPU
+
+A reader who wants to check this repository's own claims — not re-run a measurement — can do all of it on
+the committed contents alone, with no engine, no weights and no private log:
+
+```sh
+sh scripts/validate.sh
+```
+
+It runs the synthetic extraction regression tests in `tests/extract/`, checks the structure of the three
+published TSVs, checks that each manifest's declared sha256, record count and window match the file beside
+it, recomputes 34 published figures straight from the TSVs, scans tracked text for personal paths and
+credential-shaped strings, and runs the extraction programs against synthetic fixtures to confirm they fail
+loudly on a bad invocation. It needs only `git`, `awk`, `python3` and a checkout. Its output is also what
+GitHub Actions runs on every push (`.github/workflows/validate.yml`).
+
+It does **not** benchmark, evaluate a model, or contact the engine. Re-running the extraction against the
+private log is available only as `sh scripts/validate.sh --reextract <archive-dir>`, which is an owner
+action and is never part of CI.
+
+Verified on 2026-11-05 against the archived copy described in §6: all three datasets re-derive byte for
+byte with the corrected programs (134 / 233 / 1 941 records, sha256 `95e46eb1…`, `e1e91051…`, `8bc104e1…`,
+equal to the `tsv_sha256` each manifest already published), and the 34 recomputed figures match what
+`docs/findings.md` §1–§2 and §5 state.
 
 ---
 
@@ -417,7 +483,7 @@ Copy this as the skeleton of a `manifest.json`. Fields that were not captured mu
 
 1. **Nothing else may use the GPU.** No agent session served by the same engine, no other inference
    process, no benchmarking from inside the workload you are measuring. This project's own audit
-   violated this and the consequence is documented in `docs/evidence-inventory.md` §5.1.
+   violated this and the consequence is documented in `docs/evidence-inventory.md` §5 item 1.
 2. Record load average before and after, and record the power profile.
 3. Start the engine once per condition and let it report its own sizing (expert cache slots, prompt
    chunk). Those numbers are part of the condition, not incidental.
@@ -516,8 +582,13 @@ diff <(tail -n +2 "$REPO/results/strata/2026-10-30-11-02-engine-diagnostics/engi
 
 Each `diff` must print nothing. A diff that changes **only placeholder form** (`<STRATA_INSTALL_ROOT>`,
 `<HOME>`) is a wrong `-v R=` or `-v H=` value, not evidence that the log changed; the two ways this happened
-during the audit are recorded in `docs/methodology.md` §2.1. A zero-row output means the window variables
-were omitted.
+during the audit are recorded in `docs/methodology.md` §2.1. Since 2026-11-05 the programs make both
+failures loud: run these commands with `2>&1 | tail -1` and check the exit status, because a zero-row
+output is now reported as an error (status 65) instead of exiting quietly, and a payload that still
+carries an absolute personal path makes the program refuse to publish (status 66). Add `-v expect=134`,
+`-v expect=233` or `-v expect=1941` to each command to have the record count asserted. `-v H=` is only
+read by the diagnostics program; the two request programs accept it and use it only if a home-directory
+path appears outside the install root.
 
 ### What was true at the time this procedure was written
 

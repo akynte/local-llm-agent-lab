@@ -53,7 +53,10 @@ results/
                               throughput records; in all three the extraction program is committed next
                               to the data it produced)
 
-scripts/                   (Phase 2) extraction, parsing, validation, comparison, rendering
+scripts/                   validate.sh + validate.py exist (2026-11-05): dataset structure, manifest
+                             consistency, published-figure recomputation, publication safety over tracked
+                             text, and extraction-program regression tests. Phase 2 must still add
+                             extraction, parsing, comparison and rendering on top of them
 schemas/                   (Phase 2) the normalized result record and its validator
 benchmarks/                (Phase 2/3) fixtures, task definitions, harness inputs
 case-studies/              (Phase 3) the Go rate-limiter study, once licensable

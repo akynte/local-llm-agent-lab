@@ -31,7 +31,7 @@ machine), hostname, username, serial number, network identifiers.
 | Threads per core | 2 | `lscpu` |
 | NUMA nodes | 1 (CPUs 0-15) | `lscpu` |
 | AVX-512 | **absent** — zero `avx512*` flags in `/proc/cpuinfo` | `/proc/cpuinfo`, independently corroborated by the engine's own startup line "this CPU has no AVX-512: the expert kernels run on AVX-2" |
-| Relevant vector ISA | AVX2, AVX-VNNI, VAES, bf16-adjacent paths as exposed by the kernel | `/proc/cpuinfo` flags |
+| Relevant vector ISA | AVX2, AVX-VNNI, VAES (the flags `/proc/cpuinfo` reports; no `avx512*` flag is present) | `/proc/cpuinfo` flags. An earlier version of this row also asserted "bf16-adjacent paths as exposed by the kernel", which no captured command here supports; it was removed on 2026-11-05 (conflict C24) |
 
 The engine assigns 9 worker threads, one per physical core but the host's, and pins the host
 thread to logical CPU 0: 34 of the 57 logged launches carry
@@ -71,10 +71,10 @@ so that a reader comparing machines is not misled.
 | Max SM clock | 3105 MHz | `nvidia-smi --query-gpu=clocks.max.sm` |
 | Max memory clock | 8001 MHz | `nvidia-smi --query-gpu=clocks.max.memory` |
 | Power limit | not reported by the query on this laptop: `power.limit` returns `[N/A]`, and `power.draw.max` is not a valid field on this driver. Recorded instantaneous draw 53.22 W (2026-11-03, engine loaded, GPU at 100 %). An earlier draft of this file quoted "56 W with a 111 W cap" from a `nvidia-smi` table view whose output was never captured — that figure is **U** and is not used anywhere | `nvidia-smi --query-gpu=power.draw,power.limit --format=csv` |
-| PCIe link in use | Gen4 (16.0 GT/s) × 8 lanes | `/sys/bus/pci/devices/0000:01:00.0/current_link_{speed,width}` |
+| PCIe link in use | Gen4 (16.0 GT/s) × 8 lanes | `/sys/bus/pci/devices/0000:01:00.0/current_link_{speed,width}` — **the raw sysfs output of this reading is not captured in this repository**; the link width is corroborated only by the engine's own probe lines, which are published. Treat the Gen4 ×8 statement as reported-by-command but not evidenced by a captured output here |
 | Host→device bandwidth measured by the engine | The engine probes the link only when `--pcie-frac` is absent: the **42** launches without that flag logged a probe (best-of-four value **11.0–11.6 GB/s**: 11.5 ×20, 11.4 ×14, 11.6 ×5, 11.0/11.1/11.2 ×1 each) and the **15** launches that set the flag logged no probe line; the two sets do not overlap (42 + 15 = 57) | `PCIe probe:` lines published in `results/strata/2026-10-30-11-02-engine-diagnostics/`; the engine turned the probe into `pcie_frac` 0.32 ×24, 0.31 ×17, 0.30 ×1 |
 | ECC | not available on this GPU (`Volatile Uncorr. ECC: N/A`) | `nvidia-smi` |
-| Multipass/graphics co-residency | the desktop session's compositor also holds a few MiB on the same device; see §"Recorded outputs" for the captured `nvidia-smi` process table | `nvidia-smi` process table |
+| Graphics co-residency on the same device | **not established.** The captured `nvidia-smi` compute-apps query lists only the engine process, and the desktop session does not appear in it. An earlier draft claimed the desktop compositor "holds ~2 MiB on the same GPU"; that is **not** reproducible from the recorded command and is recorded as unverified (see §"Recorded outputs" and `docs/evidence-inventory.md` §5 item 1) | `nvidia-smi` process table — captured output shows one compute process only |
 
 ## Storage
 

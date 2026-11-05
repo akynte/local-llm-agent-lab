@@ -54,14 +54,42 @@ git diff --cached | grep -ni -- "$(printf '%s' "$(hostname)" | tr -c '[:alnum:]'
 git diff --cached --name-only | xargs -r -I{} sh -c 'test -f "{}" && printf "%8d  %s\n" "$(wc -c <"{}")" "{}"' | sort -rn | head -20
 
 # 4. Model weights or raw logs must never appear
-git diff --cached --name-only | grep -nE '\.(gguf|safetensors|exl3|ggml|log|jsonl)$' && echo "REJECT: model or raw-log artifact staged"
+git diff --cached --name-only | grep -nE '\.(gguf|safetensors|exl3|ggml|pack|log|jsonl|ndjson|tar|tar\.zst|zip)$' && echo "REJECT: model or raw-log artifact staged"
+
+# 5. The repository-wide check (scans every tracked text file, not just the staged diff)
+sh scripts/validate.sh
 ```
 
-Commands 1, 2 and 4 are expected to produce **no output** (command 2 prints `REJECT` only when it
-matches, and command 4 likewise). Command 3 is informational: check that nothing listed is a weight,
-a log or an unexplained large file.
+What the commands produce, stated precisely:
 
-What the scan enforces, stated precisely:
+- **Command 1 prints candidate matches for a human to read; it is not a pass/fail gate.** Documentation that
+  *names* a home-directory root (`/home/…`, `/Users/…`, `/root/.…`) matches it, as does a synthetic test
+  fixture such as `/home/example`. What must not appear in the output is a path containing a real username.
+  Every match in a commit here has been read for that reason, and the bracketed first characters in the
+  pattern keep it from matching its own text and nothing else.
+- **Commands 2 and 4 print nothing** unless they match, in which case they print `REJECT`.
+- **Command 3 is informational:** check that nothing listed is a weight, a log or an unexplained large file.
+- **Command 5 (`scripts/validate.py` check [7]) is the gate**: its path pattern requires a trailing `/`, so it
+  matches a real path rather than prose that names a root, and it scans every tracked text file.
+
+`sh scripts/validate.sh` is the check that also catches a personal path committed **earlier**, because it
+scans every tracked text file rather than the staged diff. It additionally checks dataset structure,
+manifest consistency and the published figures. Run it before every commit and expect the extraction
+regression tests to pass.
+
+What these checks do **not** do — read `docs/evidence-inventory.md` §6.1 before describing any of them as a
+guarantee:
+
+- commands 1–4 see only the staged diff; a path already in an earlier commit is invisible to them;
+- the path patterns cover `/home/…`, `/Users/…` and `/root/.…`. A home directory elsewhere
+  (`/export/home/…`, `/var/home/…`) is not matched by them, and neither form checks for a local username
+  that appears outside an absolute path;
+- the hostname check resolves `hostname` at run time, so it only catches this machine's name, and matches
+  nothing if `hostname` returns empty;
+- nothing inspects commit messages, author metadata, or Git history;
+- `.gitignore` prevents weight and raw-log extensions from being added by accident. It is not a scan.
+
+What is allowed and what is not:
 
 - **Not allowed:** an absolute path that begins under a user's home directory (any path whose first
   component is a home-directory root), a hostname, a machine UUID or serial, a credential, a raw log, a

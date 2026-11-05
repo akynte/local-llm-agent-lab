@@ -14,7 +14,7 @@ fix timelines depend on the affected component.
 
 In scope:
 
-- the benchmark and analysis tooling in `scripts/` (once it exists),
+- the validation tooling in `scripts/validate.sh` and `scripts/validate.py` and the extraction programs in `results/strata/*/extract.awk`,
 - the result schemas and their validation,
 - documentation instructions that would cause a reader to leak credentials, expose a local inference
   endpoint, or run a destructive command.
@@ -38,5 +38,15 @@ Out of scope:
 
 ## Before you commit anything
 
-Run the publication-safety scan described in `CONTRIBUTING.md`. It looks for absolute personal
-paths, credentials, hostnames, and accidentally staged large or private files.
+Run both forms of the publication-safety check described in `CONTRIBUTING.md`:
+
+1. the four `git diff --cached` commands, which inspect what you are about to commit;
+2. `sh scripts/validate.sh`, which scans **every tracked text file** for absolute personal paths,
+   credential-shaped strings and this machine's hostname, and checks dataset structure and manifest
+   consistency.
+
+Neither is a guarantee. `docs/evidence-inventory.md` §6.1 lists seven things they cannot catch, including
+a username appearing outside an absolute path, a home directory outside the roots the patterns cover, a
+secret already committed before the check existed, and commit messages or author metadata. A claim that a
+published file was scanned for a local username describes a manual action, not something any committed
+program performs.

@@ -1,0 +1,40 @@
+name: validate published record
+
+# CPU-only. This workflow runs no model, no inference engine, no benchmark and no GPU job, and it
+# requires no secrets, no network access and no private archive. See SECURITY.md.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tool versions
+        run: |
+          awk --version 2>&1 | head -1 || awk -W version 2>&1 | head -1
+          python3 --version
+          git version
+
+      # Synthetic extraction regression tests plus structure, manifest, claim-recomputation
+      # and publication-safety checks over the committed repository contents.
+      - name: Validate the published record
+        run: sh scripts/validate.sh
+
+      # A dataset directory must contain only its README, manifest, extraction program and TSV.
+      # validate.py check [1] enforces this; this step makes a failure visible as a file listing.
+      - name: Dataset directory contents on failure
+        if: failure()
+        run: ls -la results/strata/*/

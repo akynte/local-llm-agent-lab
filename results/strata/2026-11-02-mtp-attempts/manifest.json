@@ -133,9 +133,12 @@
     "program_note": "run it as: printf 'kind\\tlog_line\\tengine_started_local\\tpayload\\n' > engine-metrics.tsv, then awk -v lo=9470 -v hi=12626 -v R=\"$INSTALL_ROOT\" -f extract.awk \"$ENGINE_LOG\" >> engine-metrics.tsv. The install root is passed in at run time, so neither this manifest nor the program contains an absolute personal path. Syntax note: conditions are kept on one line because the default awk on this host is mawk, which rejects a condition continued across lines. Re-running the committed program reproduced this TSV byte for byte at 15 693, at 17 233, at 18 689, at 19 664 and at 20 648 log lines (see line_anchors_reverified)",
     "sanitization_applied": [
       "engine binary absolute path replaced with 'strata'",
-      "model, pack and draft-layer paths reduced to install-relative paths",
-      "no prompt text, completion text, tool output or conversation content published"
-    ]
+      "model, pack and draft-layer paths reduced to install-relative paths, matched literally and only where the install root begins a path, so a component that merely shares the prefix is left alone",
+      "the line prefixes 'strata generate: ' and 'strata serve: ' and the '[strata] <date> <time> engine started: ' prefix are stripped from every published payload",
+      "no prompt text, completion text, tool output or conversation content published",
+      "the program refuses to publish if any absolute personal path survives these substitutions (exit 66), and refuses to exit successfully having selected nothing (exit 65)"
+    ],
+    "verbatim_note": "selected payload lines are the log lines after the path substitutions and the prefix stripping listed above; no numeric value was edited. Until 2026-11-05 this manifest did not disclose the prefix stripping (conflict C15)"
   },
   "repetitions": { "identical_prompt_repetitions_present": true, "detail": "four repetition groups live in the 10:00:17 session, which ran the 16387-token prompt three times (388.7 / 390.4 / 390.7, 0.51% spread), the 4093-token prompt three times (360.2 / 375.1 / 377.3, 4.75%), the 4089-token prompt twice (362.4 / 382.5, 5.55%) and a 77-token prompt three times (52.2 / 54.0 / 87.2, 67.05%); 4089 and 4093 are two distinct prompts, not one prompt run five times. The 15:17:33 session ran 16991 and 16993 tokens, which are also two distinct prompts and not a repetition" },
   "peak": { "ram_bytes": null, "vram_bytes": null, "sampled_every_s": null, "note": "not captured; only engine self-reported allocations exist" },
@@ -151,7 +154,8 @@
       "window_inclusive": [9470, 12626],
       "rows_produced": 233,
       "result": "re-extracted from the archived copy on 2026-11-04 with the committed extract.awk and the same window variables; the diff against the committed engine-metrics.tsv printed nothing, i.e. byte-for-byte identity",
-      "tsv_sha256": "8bc104e121e7d392ea2dd18da037a14df733ba456f88c9a40d178efd60ced1af"
+      "tsv_sha256": "8bc104e121e7d392ea2dd18da037a14df733ba456f88c9a40d178efd60ced1af",
+      "reverified_again_2026_11_05": "re-derived from the same archived copy on 2026-11-05 with the corrected extract.awk (literal boundary-aware path substitution, validated -v arguments, nonzero exit on a zero-record window): 233 records, empty diff, sha256 unchanged. docs/evidence-inventory.md §6.2"
     },
     "note": "line numbers in this manifest are anchors into the archived copy, not identifiers. The private directory holding the archive, and the private ARCHIVE.md beside it, are not published and never enter this repository"
   },

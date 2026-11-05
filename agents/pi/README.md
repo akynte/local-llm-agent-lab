@@ -26,8 +26,80 @@ measurement were the same process chain. A recorded `nvidia-smi` reading from 20
 the engine holding **7 485 MiB of the 8 188 MiB** device at **100 %** utilization while the audit itself was
 being served by it (full output in `docs/hardware.md`, "Recorded outputs"). Any timing taken in that state
 is invalid, which is why the Go benchmark suite was not re-run — see
-`docs/evidence-inventory.md` §5.1. A coding-agent evaluation that also *is* the inference load cannot
+`docs/evidence-inventory.md` §5 item 1. A coding-agent evaluation that also *is* the inference load cannot
 measure that inference load.
+
+## Who verified what
+
+Every claim in this case study belongs to exactly one of four categories, and the categories are not
+interchangeable evidence. The full claim-by-claim table with the commands actually run is
+`docs/evidence-inventory.md` §3 E4; this is the classification.
+
+### 1. Claims reported by the evaluated agent
+
+The agent's own README and commit messages. Recorded as class **A** — evidence that the agent said it — and
+nothing more:
+
+- six production defects found and fixed in the rate limiter, and the RED→GREEN cycle that allegedly
+  demonstrated each one first;
+- the clock-ordering hypothesis (reading the clock outside the mutex causing incorrect replenishment, time
+  regression or over-permission) rejected after six forced-inversion tests, and the benchmark-reporting
+  hypothesis confirmed;
+- the benchmark metric correction (`ns/call` had been inflated by `b.N`);
+- mutation-testing observations M-A, M-B and M-C;
+- all benchmark timings (37–67 ns/op `Allow`, 44.81 ns/op `Wait`, 94.30 ns/op `ReserveCancel`,
+  168.6–184.0 ns/call for the 1 000-caller benchmark).
+
+Two of these were shown to be **wrong as reported**: the CPU core count (C6) and the headline `Allow`
+figure, which was the denied-path number (C5). That is the strongest available evidence in this case study
+about how agent-reported numbers must be treated.
+
+### 2. Mechanical properties rechecked by this project
+
+Reproduced on this machine on 2026-11-03 with go1.27.3 at deliberately lower repetition counts than the
+agent used, all class **I**:
+
+| Rechecked | Result here | Agent's own figure |
+| --- | --- | --- |
+| `func Test` / `func Example` / `func Benchmark` counts | 60 / 4 / 15 | 60 / 4 / 15 |
+| `go test -race` | clean at `-count=3`, `GOMAXPROCS=4`, 9.2 s | clean at `-count=10` |
+| `go test -shuffle=on` | clean at `-count=5`, 8.9 s | clean at `-count=20` |
+| Statement coverage of `ratelimit.go` | 100.0 % | 100.0 % |
+| `gofmt -l`, `go vet` | no output, exit 0 | clean |
+| `staticcheck`, `golangci-lint` | 0 / 0 issues | 0 / 0 issues |
+| Existence of the six-defect record and the seven corresponding tests in `audit_test.go` | present | six defects |
+
+"Confirmed at reduced count" means exactly that: the same command family ran clean here with fewer
+repetitions, on a machine that was concurrently serving inference. It does not extend to anything that
+depends on timing.
+
+### 3. Claims supported by independently designed correctness tests
+
+**None.** This is the category with nothing in it, and it is the reason gap G6 is open.
+
+Every test in the Go project was written by the agent under evaluation. No test written by this project,
+no hidden fixture, no externally prepared input and no seeded-defect repair task exists for this exercise.
+The clock-ordering tests in `clockorder_test.go` were written by the same agent whose reasoning was being
+audited, so a passing run of them corroborates that the tests pass — it does not corroborate the
+conclusion the agent drew from them. The only independent findings this project produced in the exercise
+are the two reporting errors in category 1 (C5, C6), and those are errors in the agent's *report*, not
+verdicts on the limiter's behaviour.
+
+Until category 3 has content in it, no statement in this case study may be read as evidence that the rate
+limiter is correct.
+
+### 4. Claims that remain unverified, or whose artifacts are unavailable
+
+- `govulncheck` — not re-run (needs a network fetch); gap G9.
+- All benchmark timings — deliberately not re-run, because this audit session is itself the inference load
+  on the device under study.
+- The RED failures behind each of the six defects — the runs were not retained; there is no pinned
+  baseline revision of the pre-fix code.
+- Mutation testing M-A / M-B / M-C — performed by the agent, no artifact retained.
+- The clock-ordering mechanism — the tests exist and pass; the reasoning was not independently reproduced.
+- The benchmark-metric fix itself — not re-run.
+- The Go source as a whole — not published here at all (gap G2, reference-only), so a reader cannot check
+  any of the above from this repository.
 
 ## Session record (metadata only)
 
@@ -78,7 +150,8 @@ Those are the agent's own claims (**A**); the tests exist in `clockorder_test.go
 - 100% statement coverage of the agent's own code, measured by the agent's own tests, is not evidence
   of correctness.
 - No hidden test, no externally authored fixture, and no independent oracle existed for this run.
-  Phase 3 exists to add them.
+  Phase 3 exists to add them. The "who verified what" section above states plainly that the
+  independently-tested category is currently empty.
 
 ## What Phase 3 will change
 
